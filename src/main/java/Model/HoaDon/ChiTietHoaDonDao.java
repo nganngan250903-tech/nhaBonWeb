@@ -199,6 +199,8 @@ public class ChiTietHoaDonDao {
         }
 
         psCheck.close();
+   
     }
+
 
 }

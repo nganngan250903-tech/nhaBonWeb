@@ -35,5 +35,6 @@ public class ChiTietHoaDonBo {
         dao.themMonCoGhiChu(maHD, maMon, soLuong, ghiChu);
         new HoaDonDao().capNhatTongTien(maHD);
     }
+   
 
 }
