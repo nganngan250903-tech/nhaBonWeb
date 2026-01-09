@@ -14,10 +14,26 @@
 </head>
 
 <body class="bg-light">
-
+<%
+    String msgSuccess = (String) session.getAttribute("msgSuccess");
+    String msgError = (String) session.getAttribute("msgError");
+%>
 <jsp:include page="layout/adminSidebar.jsp"/>
 
 <div class="admin-content">
+	<% if (msgSuccess != null) { %>
+<div class="alert alert-success alert-dismissible fade show">
+    <%= msgSuccess %>
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+</div>
+<% session.removeAttribute("msgSuccess"); } %>
+
+<% if (msgError != null) { %>
+<div class="alert alert-danger alert-dismissible fade show">
+    <%= msgError %>
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+</div>
+<% session.removeAttribute("msgError"); } %>
     <h3 class="mb-4">🍽️ Quản lý Món ăn</h3>
 
 		<form class="d-flex mb-3" action="QLMonController">
@@ -42,7 +58,7 @@
 				<td><%=m.getGia()%> đ</td>
 				<td>
 					<span class="badge <%=m.getTrangThaiMon()==1?"bg-success":"bg-secondary"%>">
-						<%=m.getTrangThaiMon()==1?"BestSeller":"Ngừng bán"%>
+						<%=m.getTrangThaiMon()==1?"BestSeller":"Bình thường"%>
 					</span>
 				</td>
 				<td>
@@ -59,9 +75,11 @@
 			</tr>
 			<% } %>
 		</table>
-	</main>
+	
 
 </div>
-</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>

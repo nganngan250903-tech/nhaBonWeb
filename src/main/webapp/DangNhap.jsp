@@ -46,7 +46,7 @@
 
     <form action="DangNhapController" method="post">
 
-        <input type="hidden" name="loginType" id="loginType" value="NV">
+        
 
         <div class="mb-3">
             <label class="form-label">Tên đăng nhập</label>

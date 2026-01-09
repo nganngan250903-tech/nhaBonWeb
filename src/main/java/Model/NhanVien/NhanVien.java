@@ -5,15 +5,10 @@ import java.util.Objects;
 public class NhanVien {
     private String MaNV;
     private String tenNV;
-    private String maQuyen;
+    private int MaQuyen;
     private String userName;
     private String pass;
     private boolean trangThaiNV;
-	@Override
-	public String toString() {
-		return "NhanVien [MaNV=" + MaNV + ", tenNV=" + tenNV + ", maQuyen=" + maQuyen + ", userName=" + userName
-				+ ", pass=" + pass + ", trangThaiNV=" + trangThaiNV + "]";
-	}
 	public String getMaNV() {
 		return MaNV;
 	}
@@ -26,11 +21,11 @@ public class NhanVien {
 	public void setTenNV(String tenNV) {
 		this.tenNV = tenNV;
 	}
-	public String getMaQuyen() {
-		return maQuyen;
+	public int getMaQuyen() {
+		return MaQuyen;
 	}
-	public void setMaQuyen(String maQuyen) {
-		this.maQuyen = maQuyen;
+	public void setMaQuyen(int maQuyen) {
+		MaQuyen = maQuyen;
 	}
 	public String getUserName() {
 		return userName;
@@ -50,13 +45,19 @@ public class NhanVien {
 	public void setTrangThaiNV(boolean trangThaiNV) {
 		this.trangThaiNV = trangThaiNV;
 	}
-	public NhanVien(String maNV, String tenNV, String maQuyen, String userName, String pass, boolean trangThaiNV) {
+	public NhanVien(String maNV, String tenNV, int maQuyen, String userName, String pass, boolean trangThaiNV) {
 		super();
 		MaNV = maNV;
 		this.tenNV = tenNV;
-		this.maQuyen = maQuyen;
+		MaQuyen = maQuyen;
 		this.userName = userName;
 		this.pass = pass;
 		this.trangThaiNV = trangThaiNV;
 	}
+	@Override
+	public String toString() {
+		return "NhanVien [MaNV=" + MaNV + ", tenNV=" + tenNV + ", MaQuyen=" + MaQuyen + ", userName=" + userName
+				+ ", pass=" + pass + ", trangThaiNV=" + trangThaiNV + "]";
+	}
+    
 }

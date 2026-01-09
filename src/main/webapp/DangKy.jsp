@@ -63,6 +63,8 @@
             <label class="form-label">Email</label>
             <input type="email" name="email" class="form-control">
         </div>
+	<<!-- Mặc định quyền = Nhân viên -->
+<input type="hidden" name="maQuyen" value="2">
 
         <button class="btn btn-success w-100 mt-2">Đăng ký</button>
 

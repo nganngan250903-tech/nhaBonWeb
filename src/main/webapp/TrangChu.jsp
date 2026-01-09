@@ -17,40 +17,8 @@
 <body>
 
 <!-- ================= NAVBAR ================= -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div class="container">
-    <a class="navbar-brand fw-bold" href="TrangChuController">🍜 ỐC NHÀ BON</a>
-
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="menu">
-      <ul class="navbar-nav me-auto">
-        <li class="nav-item"><a class="nav-link active" href="TrangChuController">Menu</a></li>
-        <li class="nav-item"><a class="nav-link" href="GioiThieuController">Giới thiệu</a></li>
-        <li class="nav-item"><a class="nav-link" href="DonHangController">Đơn hàng</a></li>
-        <li class="nav-item"><a class="nav-link" href="ThanhToanController">Thanh toán</a></li>
-        <li class="nav-item"><a class="nav-link" href="LichSuController">Lịch sử</a></li>
-      </ul>
-
-      <!-- GIỎ HÀNG -->
-<a href="DonHangController" class="position-relative text-white text-decoration-none">
-    🛒
-    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-        <c:choose>
-            <c:when test="${sessionScope.gio != null}">
-                ${sessionScope.gio.tongSoLuong()}
-            </c:when>
-            <c:otherwise>0</c:otherwise>
-        </c:choose>
-    </span>
-</a>
-
-
-    </div>
-  </div>
-</nav>
+<!-- ================= NAVBAR ================= -->
+<jsp:include page="layout/customerNavbar.jsp" />
 
 <!-- ================= MAIN ================= -->
 <div class="container mt-4">
@@ -133,10 +101,21 @@
               <!-- NÚT ĐẶT -->
               <div class="card-footer bg-white text-center">
                 <c:if test="${m.soLuong > 0}">
-                  <a href="GioHangController?maMon=${m.maMon}&action=add"
-                     class="btn btn-success btn-sm">
-                    ➕ Đặt món
-                  </a>
+                  <c:choose>
+                    <c:when test="${sessionScope.khachhang != null}">
+                      <a href="GioHangController?maMon=${m.maMon}&action=add"
+                         class="btn btn-success btn-sm">
+                        ➕ Đặt món
+                      </a>
+                    </c:when>
+                    <c:otherwise>
+                      <a href="DangNhapKhachController"
+                         class="btn btn-warning btn-sm"
+                         title="Vui lòng đăng nhập để đặt món">
+                        🔒 Đăng nhập để đặt
+                      </a>
+                    </c:otherwise>
+                  </c:choose>
                 </c:if>
               </div>
 

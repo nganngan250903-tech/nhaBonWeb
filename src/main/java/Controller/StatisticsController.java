@@ -33,7 +33,7 @@ public class StatisticsController extends HttpServlet {
 		request.setAttribute("tongBan", banBO.getTongBan());
 		request.setAttribute("tongMon", monBO.getTongMon());
 		request.setAttribute("tongNhanVien", nvBO.getTongNhanVien());
-		request.setAttribute("tongHoaDon", hdBO.getTongHoaDon());
+		
 
 		// Revenue statistics
 		request.setAttribute("tongDoanhThu", hdBO.getTongDoanhThu());

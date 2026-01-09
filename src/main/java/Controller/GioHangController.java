@@ -34,6 +34,15 @@ public class GioHangController extends HttpServlet {
         String action = request.getParameter("action");
 
         try {
+            // ===== KIỂM TRA ĐĂNG NHẬP KHÁCH HÀNG =====
+            Model.KhachHang.KhachHang kh = (Model.KhachHang.KhachHang) session.getAttribute("khachhang");
+            if (kh == null) {
+                // Chưa đăng nhập - chuyển đến trang đăng nhập
+                session.setAttribute("redirectAfterLogin", request.getRequestURI() +
+                    (request.getQueryString() != null ? "?" + request.getQueryString() : ""));
+                response.sendRedirect("DangNhapKhachController");
+                return;
+            }
 
             // ➕ THÊM MÓN → quay lại MENU
             if (maMon != null && "add".equals(action)) {
@@ -51,17 +60,29 @@ public class GioHangController extends HttpServlet {
 
             // ❌ XÓA MÓN
             if ("xoa".equals(action)) {
+                if (kh == null) {
+                    response.sendRedirect("DangNhapKhachController");
+                    return;
+                }
                 gio.xoa(Long.parseLong(maMon));
             }
 
             // 🔄 CẬP NHẬT SỐ LƯỢNG
             if ("update".equals(action)) {
+                if (kh == null) {
+                    response.sendRedirect("DangNhapKhachController");
+                    return;
+                }
                 int sl = Integer.parseInt(request.getParameter("soLuong"));
                 gio.capNhat(Long.parseLong(maMon), sl);
             }
 
             // 📝 CẬP NHẬT GHI CHÚ
             if ("capnhat".equals(action)) {
+                if (kh == null) {
+                    response.sendRedirect("DangNhapKhachController");
+                    return;
+                }
                 for (GioHang g : gio.getDs()) {
                     String note = request.getParameter("note_" + g.getMaMon());
                     if (note != null) {

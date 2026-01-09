@@ -18,7 +18,8 @@ public class TrangChuController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-	        throws ServletException, IOException {
+            throws ServletException, IOException {
+	
 		request.setCharacterEncoding("UTF-8");
 		response.setCharacterEncoding("UTF-8");
 
@@ -32,6 +33,7 @@ public class TrangChuController extends HttpServlet {
 
 	        // load danh mục luôn
 	        request.setAttribute("dsDanhMuc", dmBo.getAll());
+	        request.setAttribute("activeMenu", "trangchu");
 
 	        // ===== LOGIC CHUẨN =====
 	        if (key != null && !key.trim().isEmpty()) {

@@ -41,12 +41,12 @@
 	<h4 class="text-center">QUẢN TRỊ</h4>
 	<hr class="text-white mx-3">
 
-	<a href="AdminHomeController">🏠 Dashboard</a>
 	<a href="StatisticsController">📊 Thống kê</a>
 	<a href="QLMonController">🍽️ Quản lý Món</a>
-	<a href="DanhMucController">📂 Danh mục</a>
-	<a href="BanAdminController">🪑 Bàn ăn</a>
+	<a href="QLDanhMucController">📂 Danh mục</a>
+	<a href="QLBanController">🪑 Bàn ăn</a>
 	<a href="HoaDonAdminController">🧾 Đơn hàng</a>
+	<a href="QuanLyTrangThaiController">⚙️ Trạng thái món</a>
 
 	<a href="dangxuatAdminController" class="fw-bold mt-3 text-danger">
 		🚪 Đăng xuất

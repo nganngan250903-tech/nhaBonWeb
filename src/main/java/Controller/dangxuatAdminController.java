@@ -26,19 +26,24 @@ public class dangxuatAdminController extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		  HttpSession session = request.getSession(false);
-	        if (session != null) {
-	            session.invalidate(); // ❌ xóa toàn bộ session
-	        }
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+	        throws ServletException, IOException {
 
-	        //  quay về trang chủ
-	        response.sendRedirect("tcController"); 
-	       
+	    HttpSession session = request.getSession(false);
+
+	    if (session != null) {
+	        // CLEAR TOÀN BỘ SESSION - an toàn nhất cho admin logout
+	        session.invalidate();
+	        System.out.println("Admin session đã được invalidate thành công");
 	    }
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+
+	    // ➜ Quay về giao diện nhân viên / trang chủ
+	    response.sendRedirect("TrangChuController");
 	}
 
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+	        throws ServletException, IOException {
+	    doGet(request, response);
+	}
 }

@@ -9,7 +9,7 @@
         return;
     }
 
-    if (!"1".equals(nv.getMaQuyen())) {
+    if (nv.getMaQuyen() != 1) {
         response.sendRedirect("403.jsp");
         return;
     }

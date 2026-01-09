@@ -1,6 +1,7 @@
 package Model.HoaDon;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 public class HoaDonBO {
 
@@ -18,10 +19,6 @@ public class HoaDonBO {
 
         return dao.themHoaDon(hd);
     }
-
-    public int getTongHoaDon() {
-		return dao.countHoaDon();
-	}
 
 	public long getTongDoanhThu() {
 		return dao.getTongDoanhThu();
@@ -53,5 +50,25 @@ public class HoaDonBO {
 
 	public List<Object[]> getTopMonAnBanChay() {
 		return dao.getTopMonAnBanChay();
+	}
+
+	// Lấy đơn hàng theo khách hàng (đơn hàng gần nhất chưa thanh toán)
+	public List<Object[]> getDonHangByKhachHang(long maKH) throws Exception {
+		return dao.getDonHangByKhachHang(maKH);
+	}
+
+	// Lấy tất cả đơn hàng đang xử lý (chưa thanh toán)
+	public List<Object[]> getAllDonHangDangXuLy() throws Exception {
+		return dao.getAllDonHangDangXuLy();
+	}
+
+	// Lấy tất cả hóa đơn với thông tin khách hàng
+	public List<Object[]> getAllHoaDonWithKhachHang() throws Exception {
+		return dao.getAllHoaDonWithKhachHang();
+	}
+
+	// Lấy hóa đơn theo ID với thông tin khách hàng
+	public Object[] getHoaDonById(long maHD) throws Exception {
+		return dao.getHoaDonById(maHD);
 	}
 }

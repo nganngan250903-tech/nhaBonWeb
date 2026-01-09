@@ -34,24 +34,6 @@ public class HoaDonDAO {
         kn.cn.close();
         return maHD;
     }
-    public int countHoaDon() {
-		try {
-			KetNoi kn = new KetNoi();
-			kn.ketnoi();
-
-			String sql = "SELECT COUNT(*) FROM HoaDon";
-			PreparedStatement ps = kn.cn.prepareStatement(sql);
-			ResultSet rs = ps.executeQuery();
-
-			if (rs.next()) {
-				return rs.getInt(1);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return 0;
-	}
-
 	// Get total revenue from paid invoices
 	public long getTongDoanhThu() {
 		try {
@@ -244,5 +226,171 @@ public class HoaDonDAO {
 			e.printStackTrace();
 		}
 		return result;
+	}
+
+	// Lấy đơn hàng theo khách hàng (đơn hàng gần nhất chưa thanh toán)
+	public List<Object[]> getDonHangByKhachHang(long maKH) throws Exception {
+		List<Object[]> result = new ArrayList<>();
+		KetNoi kn = new KetNoi();
+		kn.ketnoi();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		try {
+			String sql = "SELECT TOP 1 MaHD, MaBan, MaNV, GioVao, GioRa, TongTien, ThanhToan, MaKH " +
+						 "FROM HoaDon " +
+						 "WHERE MaKH = ? AND ThanhToan = 0 " +
+						 "ORDER BY GioVao DESC";
+
+			ps = kn.cn.prepareStatement(sql);
+			ps.setLong(1, maKH);
+
+			rs = ps.executeQuery();
+			if (rs.next()) {
+				result.add(new Object[]{
+					rs.getLong("MaHD"),
+					rs.getLong("MaBan"),
+					rs.getLong("MaNV"),
+					rs.getTimestamp("GioVao"),
+					rs.getTimestamp("GioRa"),
+					rs.getLong("TongTien"),
+					rs.getInt("ThanhToan"),
+					rs.getLong("MaKH")
+				});
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if (rs != null) rs.close();
+			if (ps != null) ps.close();
+			if (kn.cn != null) kn.cn.close();
+		}
+		return result;
+	}
+
+	// Lấy tất cả đơn hàng đang xử lý (chưa thanh toán) với thông tin khách hàng
+	public List<Object[]> getAllDonHangDangXuLy() throws Exception {
+		List<Object[]> result = new ArrayList<>();
+		KetNoi kn = new KetNoi();
+		kn.ketnoi();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		try {
+			String sql = "SELECT hd.MaHD, hd.MaBan, hd.GioVao, hd.TongTien, kh.TenKH, kh.SDT " +
+						 "FROM HoaDon hd " +
+						 "JOIN KhachHang kh ON hd.MaKH = kh.MaKH " +
+						 "WHERE hd.ThanhToan = 0 " +
+						 "ORDER BY hd.GioVao DESC";
+
+			ps = kn.cn.prepareStatement(sql);
+			rs = ps.executeQuery();
+
+			while (rs.next()) {
+				result.add(new Object[]{
+					rs.getLong("MaHD"),
+					rs.getLong("MaBan"),
+					rs.getTimestamp("GioVao"),
+					rs.getLong("TongTien"),
+					rs.getString("TenKH") != null ? rs.getString("TenKH") : "",
+					rs.getString("SDT") != null ? rs.getString("SDT") : ""
+				});
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if (rs != null) rs.close();
+			if (ps != null) ps.close();
+			if (kn.cn != null) kn.cn.close();
+		}
+		return result;
+	}
+
+	// Lấy tất cả hóa đơn với thông tin khách hàng
+	public List<Object[]> getAllHoaDonWithKhachHang() throws Exception {
+		List<Object[]> result = new ArrayList<>();
+		KetNoi kn = new KetNoi();
+		kn.ketnoi();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		try {
+			String sql = "SELECT hd.MaHD, hd.MaBan, hd.GioVao, hd.GioRa, hd.TongTien, hd.ThanhToan, " +
+						 "kh.TenKH, kh.SDT, nv.TenNV " +
+						 "FROM HoaDon hd " +
+						 "LEFT JOIN KhachHang kh ON hd.MaKH = kh.MaKH " +
+						 "LEFT JOIN NhanVien nv ON hd.MaNV = nv.MaNV " +
+						 "ORDER BY hd.GioVao DESC";
+
+			ps = kn.cn.prepareStatement(sql);
+			rs = ps.executeQuery();
+
+			while (rs.next()) {
+				result.add(new Object[]{
+					rs.getLong("MaHD"),
+					rs.getLong("MaBan"),
+					rs.getTimestamp("GioVao"),
+					rs.getTimestamp("GioRa"),
+					rs.getLong("TongTien"),
+					rs.getInt("ThanhToan"),
+					rs.getString("TenKH") != null ? rs.getString("TenKH") : "N/A",
+					rs.getString("SDT") != null ? rs.getString("SDT") : "N/A",
+					rs.getString("TenNV") != null ? rs.getString("TenNV") : "N/A"
+				});
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if (rs != null) rs.close();
+			if (ps != null) ps.close();
+			if (kn.cn != null) kn.cn.close();
+		}
+		return result;
+	}
+
+	// Lấy hóa đơn theo ID với thông tin khách hàng
+	public Object[] getHoaDonById(long maHD) throws Exception {
+		KetNoi kn = new KetNoi();
+		kn.ketnoi();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		try {
+			String sql = "SELECT hd.MaHD, hd.MaBan, hd.GioVao, hd.GioRa, hd.TongTien, hd.ThanhToan, " +
+						 "kh.TenKH, kh.SDT, nv.TenNV " +
+						 "FROM HoaDon hd " +
+						 "LEFT JOIN KhachHang kh ON hd.MaKH = kh.MaKH " +
+						 "LEFT JOIN NhanVien nv ON hd.MaNV = nv.MaNV " +
+						 "WHERE hd.MaHD = ?";
+
+			ps = kn.cn.prepareStatement(sql);
+			ps.setLong(1, maHD);
+			rs = ps.executeQuery();
+
+			if (rs.next()) {
+				return new Object[]{
+					rs.getLong("MaHD"),
+					rs.getLong("MaBan"),
+					rs.getTimestamp("GioVao"),
+					rs.getTimestamp("GioRa"),
+					rs.getLong("TongTien"),
+					rs.getInt("ThanhToan"),
+					rs.getString("TenKH") != null ? rs.getString("TenKH") : "N/A",
+					rs.getString("SDT") != null ? rs.getString("SDT") : "N/A",
+					rs.getString("TenNV") != null ? rs.getString("TenNV") : "N/A"
+				};
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if (rs != null) rs.close();
+			if (ps != null) ps.close();
+			if (kn.cn != null) kn.cn.close();
+		}
+		return null;
 	}
 }

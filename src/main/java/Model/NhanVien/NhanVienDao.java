@@ -29,7 +29,7 @@ public class NhanVienDao {
             return new NhanVien(
                 rs.getString("MaNV"),
                 rs.getString("TenNV"),
-                rs.getString("MaQuyen"),
+                rs.getInt("MaQuyen"),
                 rs.getString("UserName"),
                 rs.getString("Pass"),
                 rs.getBoolean("TrangThaiNV")
@@ -43,17 +43,20 @@ public class NhanVienDao {
         kn.ketnoi();
 
         String sql = """
-            INSERT INTO NhanVien
-            VALUES (?, ?, 'NV', ?, ?, 1)
-        """;
+        	    INSERT INTO NhanVien
+(TenNV, MaQuyen, UserName, Pass, TrangThaiNV)
+VALUES (?, ?, ?, ?, ?)
+        	""";
 
-        PreparedStatement ps = kn.cn.prepareStatement(sql);
-        ps.setString(1, nv.getMaNV());
-        ps.setString(2, nv.getTenNV());
-        ps.setString(3, nv.getUserName());
-        ps.setString(4, nv.getPass());
+        	PreparedStatement ps = kn.cn.prepareStatement(sql);
+        	
+        	ps.setString(1, nv.getTenNV());
+        	ps.setInt(2, nv.getMaQuyen()); // ✅ QUAN TRỌNG
+        	ps.setString(3, nv.getUserName());
+        	ps.setString(4, nv.getPass());
+        	ps.setBoolean(5, nv.isTrangThaiNV());
 
-        return ps.executeUpdate() > 0;
+        	return ps.executeUpdate() > 0;
     }
 
     // Get total number of employees

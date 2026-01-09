@@ -5,15 +5,17 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Đơn hàng</title>
+<title>🍜 ỐC NHÀ BON - Đơn hàng</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
 <body>
+<!-- ================= NAVBAR ================= -->
+<jsp:include page="layout/customerNavbar.jsp" />
 <div class="container mt-4">
     <h3 class="mb-4">🛒 ĐƠN HÀNG CỦA BẠN</h3>
 
-    <form action="XacNhanDonHangController" method="post">
+    <form action="DonHangController" method="post">
         <table class="table align-middle table-bordered">
             <thead class="table-light">
                 <tr>
