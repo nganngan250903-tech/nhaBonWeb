@@ -35,6 +35,16 @@
         <div class="container-fluid">
             <h2 class="mb-4">🍽️ Quản lý trạng thái món ăn</h2>
 
+            <!-- Thông tin tổng quan -->
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i>
+                        <strong>Quản lý tất cả đơn hàng:</strong> Hiển thị đơn hàng đang xử lý của tất cả bàn trong nhà hàng.
+                    </div>
+                </div>
+            </div>
+
             <!-- Thông báo -->
             <c:if test="${not empty sessionScope.msgSuccess}">
                 <div class="alert alert-success alert-dismissible fade show" role="alert">

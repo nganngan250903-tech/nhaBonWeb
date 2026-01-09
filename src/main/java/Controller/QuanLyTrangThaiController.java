@@ -16,7 +16,7 @@ import Model.HoaDon.HoaDonBO;
 import Model.NhanVien.NhanVien;
 
 /**
- * Controller cho admin quản lý trạng thái món ăn
+ * Controller cho admin quản lý trạng thái món ăn của tất cả bàn
  */
 @WebServlet("/QuanLyTrangThaiController")
 public class QuanLyTrangThaiController extends HttpServlet {
@@ -54,32 +54,32 @@ public class QuanLyTrangThaiController extends HttpServlet {
                 request.setAttribute("dsChiTiet", chiTiet);
                 request.setAttribute("viewMode", "detail");
             } else {
-                // Lấy tất cả đơn hàng đang xử lý (chưa thanh toán)
+                // Admin xem tất cả đơn hàng đang xử lý của tất cả bàn
                 List<Object[]> dsDonHang = hoaDonBO.getAllDonHangDangXuLy();
 
-            // Tạo list mới với chi tiết món ăn
-            List<Object[]> dsDonHangWithChiTiet = new ArrayList();
+                // Tạo list mới với chi tiết món ăn
+                List<Object[]> dsDonHangWithChiTiet = new ArrayList();
 
-            for (Object[] donHang : dsDonHang) {
-                long maHD = (Long) donHang[0];
-                List<Object[]> chiTiet = null;
+                for (Object[] donHang : dsDonHang) {
+                    long maHD = (Long) donHang[0];
+                    List<Object[]> chiTiet = null;
 
-                try {
-                    chiTiet = ctBO.getChiTietByMaHD(maHD);
-                    System.out.println("Loaded " + (chiTiet != null ? chiTiet.size() : 0) + " chi tiet for MaHD: " + maHD);
-                } catch (Exception e) {
-                    System.out.println("Error loading chi tiet for MaHD " + maHD + ": " + e.getMessage());
-                    e.printStackTrace();
-                    chiTiet = new ArrayList<>(); // Empty list if error
+                    try {
+                        chiTiet = ctBO.getChiTietByMaHD(maHD);
+                        System.out.println("Loaded " + (chiTiet != null ? chiTiet.size() : 0) + " chi tiet for MaHD: " + maHD);
+                    } catch (Exception e) {
+                        System.out.println("Error loading chi tiet for MaHD " + maHD + ": " + e.getMessage());
+                        e.printStackTrace();
+                        chiTiet = new ArrayList<>(); // Empty list if error
+                    }
+
+                    // Tạo array mới với chi tiết
+                    Object[] donHangWithChiTiet = new Object[donHang.length + 1];
+                    System.arraycopy(donHang, 0, donHangWithChiTiet, 0, donHang.length);
+                    donHangWithChiTiet[donHang.length] = chiTiet;
+
+                    dsDonHangWithChiTiet.add(donHangWithChiTiet);
                 }
-
-                // Tạo array mới với chi tiết
-                Object[] donHangWithChiTiet = new Object[donHang.length + 1];
-                System.arraycopy(donHang, 0, donHangWithChiTiet, 0, donHang.length);
-                donHangWithChiTiet[donHang.length] = chiTiet;
-
-                dsDonHangWithChiTiet.add(donHangWithChiTiet);
-            }
 
                 request.setAttribute("dsDonHang", dsDonHangWithChiTiet);
             }
