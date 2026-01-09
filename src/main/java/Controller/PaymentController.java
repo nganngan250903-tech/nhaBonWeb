@@ -109,22 +109,25 @@ public class PaymentController extends HttpServlet {
         session.setAttribute("deliveryAddress", deliveryAddress);
         session.setAttribute("notes", notes);
 
-        // Chuyển đến trang xác nhận
-        request.setAttribute("paymentMethod", paymentMethod);
-        request.setAttribute("customerName", customerName);
-        request.setAttribute("customerPhone", customerPhone);
-        request.setAttribute("customerEmail", customerEmail);
-        request.setAttribute("deliveryAddress", deliveryAddress);
-        request.setAttribute("notes", notes);
+        // Lưu thông tin và chuyển đến trang QR payment
+        session.setAttribute("paymentMethod", paymentMethod);
+        session.setAttribute("customerName", customerName);
+        session.setAttribute("customerPhone", customerPhone);
+        session.setAttribute("customerEmail", customerEmail);
+        session.setAttribute("deliveryAddress", deliveryAddress);
+        session.setAttribute("notes", notes);
 
-        GioHangBo gioHang = (GioHangBo) session.getAttribute("gio");
-        request.setAttribute("gioHang", gioHang);
-
+        // Chuyển đến trang QR thanh toán với thông tin đơn hàng
         long tongTien = (Long) session.getAttribute("tongTienThanhToan");
-        request.setAttribute("tongTien", tongTien);
+        Long maHDGoc = (Long) session.getAttribute("maHDGoc");
 
-        RequestDispatcher rd = request.getRequestDispatcher("XacNhanThanhToan.jsp");
-        rd.forward(request, response);
+        // Chuyển hướng đến trang QR với parameters
+        String redirectUrl = "QRPayment.jsp?maBan=1&tongTien=" + tongTien;
+        if (maHDGoc != null) {
+            redirectUrl += "&maHD=" + maHDGoc;
+        }
+
+        response.sendRedirect(redirectUrl);
     }
 
     private void confirmPayment(HttpServletRequest request, HttpServletResponse response)
@@ -153,14 +156,15 @@ public class PaymentController extends HttpServlet {
                 tongTien += item.getThanhTien();
             }
 
-            // Tạo hóa đơn (tạm thời chưa thanh toán)
-            long maHD = hdBo.taoHoaDon(1, 1, 1, tongTien); // maBan=1, maNV=1, maKH=1
+            // Tạo hóa đơn với trạng thái thanh toán = 2 (đang chờ xác nhận thanh toán)
+            // 0 = chưa thanh toán, 1 = đã thanh toán, 2 = chờ xác nhận thanh toán
+            long maHD = hdBo.taoHoaDon(1, 1, 1, tongTien, 2); // maBan=1, maNV=1, maKH=1, thanhToan=2
 
             // Lưu thông tin thanh toán vào session để sử dụng sau
             session.setAttribute("maHD", maHD);
             session.setAttribute("thanhToanThanhCong", true);
 
-            // Xóa giỏ hàng
+            // Xóa giỏ hàng sau khi thanh toán thành công
             session.removeAttribute("gio");
 
             // Chuyển đến trang thành công

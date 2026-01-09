@@ -8,6 +8,10 @@ public class HoaDonBO {
     HoaDonDAO dao = new HoaDonDAO();
 
     public long taoHoaDon(long maBan, long maNV, long maKH, long tongTien) throws Exception {
+        return taoHoaDon(maBan, maNV, maKH, tongTien, 0); // Mặc định chưa thanh toán
+    }
+
+    public long taoHoaDon(long maBan, long maNV, long maKH, long tongTien, int thanhToan) throws Exception {
 
         HoaDon hd = new HoaDon();
         hd.setMaBan(maBan);
@@ -15,7 +19,7 @@ public class HoaDonBO {
         hd.setMaKH(maKH);
         hd.setGioVao(new Timestamp(System.currentTimeMillis()));
         hd.setTongTien(tongTien);
-        hd.setThanhToan(0); // CHƯA THANH TOÁN
+        hd.setThanhToan(thanhToan); // Trạng thái thanh toán
 
         return dao.themHoaDon(hd);
     }
@@ -70,5 +74,30 @@ public class HoaDonBO {
 	// Lấy hóa đơn theo ID với thông tin khách hàng
 	public Object[] getHoaDonById(long maHD) throws Exception {
 		return dao.getHoaDonById(maHD);
+	}
+
+	// Lấy đơn hàng theo mã hóa đơn
+	public List<Object[]> getDonHangByMaHD(long maHD) throws Exception {
+		return dao.getDonHangByMaHD(maHD);
+	}
+
+	// Lấy đơn hàng theo bàn
+	public List<Object[]> getDonHangByBan(long maBan) throws Exception {
+		return dao.getDonHangByBan(maBan);
+	}
+
+	// Cập nhật trạng thái thanh toán của hóa đơn
+	public boolean capNhatTrangThaiThanhToan(long maHD, int trangThai) throws Exception {
+		return dao.capNhatTrangThaiThanhToan(maHD, trangThai);
+	}
+
+	// Lấy danh sách đơn hàng đang chờ xác nhận thanh toán
+	public List<Object[]> getDonHangChoXacNhan() throws Exception {
+		return dao.getDonHangChoXacNhan();
+	}
+
+	// Lấy danh sách đơn hàng đã thanh toán gần đây
+	public List<Object[]> getDonHangDaThanhToan() throws Exception {
+		return dao.getDonHangDaThanhToan();
 	}
 }

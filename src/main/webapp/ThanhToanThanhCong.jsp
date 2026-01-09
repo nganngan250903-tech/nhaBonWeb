@@ -200,13 +200,9 @@
                 <div class="step">
                     <div class="step-number">3</div>
                     <div>
-                        <strong>Thanh toán và nhận hàng</strong><br>
+                        <strong>Chờ xác nhận thanh toán</strong><br>
                         <small class="text-muted">
-                            <% if ("cash".equals(paymentMethod)) { %>
-                                Thanh toán bằng tiền mặt khi nhận hàng
-                            <% } else { %>
-                                Đã thanh toán online, chỉ cần nhận hàng
-                            <% } %>
+                            Nhân viên sẽ kiểm tra và xác nhận thanh toán trong thời gian sớm nhất
                         </small>
                     </div>
                 </div>

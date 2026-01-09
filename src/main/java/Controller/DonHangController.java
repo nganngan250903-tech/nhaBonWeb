@@ -116,8 +116,13 @@ public class DonHangController extends HttpServlet {
                 }
             }
 
-            // Xoa gio hang sau khi dat hang thanh cong
+            // Xoa cac session lien quan sau khi dat hang thanh cong
             session.removeAttribute("gio");
+            session.removeAttribute("tongTienThanhToan");
+            session.removeAttribute("soLuongMon");
+
+            // Luu ma hoa don vao session de theo doi
+            session.setAttribute("maHDGoc", maHD);
 
             // Chuyển đến trang theo dõi đơn hàng
             response.sendRedirect("TheoDoiDonHangController");

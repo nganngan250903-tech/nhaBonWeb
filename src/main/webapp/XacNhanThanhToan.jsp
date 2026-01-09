@@ -244,29 +244,39 @@
             <!-- Payment Information -->
             <div class="payment-info">
                 <h5 class="section-title">
-                    <i class="fas fa-credit-card"></i>
-                    Phương thức thanh toán
+                    <i class="fas fa-qrcode"></i>
+                    Thông tin thanh toán QR Code
                 </h5>
-                <div class="d-flex align-items-center">
-                    <% if ("cash".equals(paymentMethod)) { %>
-                        <i class="fas fa-money-bill-wave fa-2x text-success me-3"></i>
-                    <% } else if ("card".equals(paymentMethod)) { %>
-                        <i class="fas fa-credit-card fa-2x text-primary me-3"></i>
-                    <% } else if ("momo".equals(paymentMethod)) { %>
-                        <i class="fas fa-mobile-alt fa-2x text-pink me-3"></i>
-                    <% } else if ("zalopay".equals(paymentMethod)) { %>
-                        <i class="fas fa-wallet fa-2x text-info me-3"></i>
-                    <% } %>
-                    <div>
-                        <h6 class="mb-0"><%=paymentMethodName%></h6>
-                        <small class="text-muted">
-                            <% if ("cash".equals(paymentMethod)) { %>
-                                Thanh toán khi nhận hàng
-                            <% } else { %>
-                                Thanh toán online
-                            <% } %>
-                        </small>
+
+                <!-- QR Code Section -->
+                <div class="text-center mb-4">
+                    <div class="qr-code-container" style="background: #f8f9fa; padding: 20px; border-radius: 10px; display: inline-block;">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=Thanh toán bàn ăn số <%=donHang != null ? donHang[1] : "N/A"%> - Số tiền: <%=formatter.format(tongTien != null ? tongTien : 0)%> VNĐ"
+                             alt="QR Code thanh toán" class="img-fluid" style="max-width: 200px;">
+                        <p class="mt-2 mb-0 text-muted">Quét mã QR để thanh toán</p>
                     </div>
+                </div>
+
+                <!-- Payment Details -->
+                <div class="payment-details bg-light p-3 rounded">
+                    <h6 class="text-center mb-3">Thông tin chuyển khoản</h6>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Người nhận:</strong> Nguyễn Thị Thanh Ngân</p>
+                            <p><strong>Ngân hàng:</strong> [Tên ngân hàng của bạn]</p>
+                            <p><strong>Số tài khoản:</strong> [Số tài khoản của bạn]</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Số tiền:</strong> <span class="text-danger fw-bold"><%=formatter.format(tongTien != null ? tongTien : 0)%> VNĐ</span></p>
+                            <p><strong>Nội dung:</strong> <span class="text-primary fw-bold">Thanh toán bàn ăn số <%=donHang != null ? donHang[1] : "N/A"%></span></p>
+                            <p><strong>Mã đơn hàng:</strong> #<%=maHD != null ? maHD : "N/A"%></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alert alert-info mt-3">
+                    <i class="fas fa-info-circle"></i>
+                    <strong>Lưu ý:</strong> Vui lòng chuyển khoản đúng số tiền và ghi đúng nội dung để việc xác nhận thanh toán được thực hiện tự động.
                 </div>
             </div>
 

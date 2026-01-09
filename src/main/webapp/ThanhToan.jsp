@@ -212,39 +212,12 @@
                         <!-- Payment Methods -->
                         <h5 class="mb-3 mt-4">Phương thức thanh toán</h5>
                         <div class="payment-methods">
-                            <div class="payment-method" onclick="selectPaymentMethod('cash')">
-                                <input type="radio" id="cash" name="paymentMethod" value="cash" required>
-                                <i class="fas fa-money-bill-wave payment-method-icon"></i>
+                            <div class="payment-method selected" onclick="selectPaymentMethod('qr')">
+                                <input type="radio" id="qr" name="paymentMethod" value="qr" required checked>
+                                <i class="fas fa-qrcode payment-method-icon"></i>
                                 <div>
-                                    <div class="fw-bold">Tiền mặt</div>
-                                    <small class="text-muted">Thanh toán khi nhận hàng</small>
-                                </div>
-                            </div>
-
-                            <div class="payment-method" onclick="selectPaymentMethod('card')">
-                                <input type="radio" id="card" name="paymentMethod" value="card">
-                                <i class="fas fa-credit-card payment-method-icon"></i>
-                                <div>
-                                    <div class="fw-bold">Thẻ tín dụng/ghi nợ</div>
-                                    <small class="text-muted">Visa, Mastercard, JCB</small>
-                                </div>
-                            </div>
-
-                            <div class="payment-method" onclick="selectPaymentMethod('momo')">
-                                <input type="radio" id="momo" name="paymentMethod" value="momo">
-                                <i class="fas fa-mobile-alt payment-method-icon"></i>
-                                <div>
-                                    <div class="fw-bold">Ví MoMo</div>
-                                    <small class="text-muted">Thanh toán qua ví điện tử MoMo</small>
-                                </div>
-                            </div>
-
-                            <div class="payment-method" onclick="selectPaymentMethod('zalopay')">
-                                <input type="radio" id="zalopay" name="paymentMethod" value="zalopay">
-                                <i class="fas fa-wallet payment-method-icon"></i>
-                                <div>
-                                    <div class="fw-bold">ZaloPay</div>
-                                    <small class="text-muted">Thanh toán qua ZaloPay</small>
+                                    <div class="fw-bold">Chuyển khoản QR Code</div>
+                                    <small class="text-muted">Quét mã QR và chờ nhân viên xác nhận</small>
                                 </div>
                             </div>
                         </div>

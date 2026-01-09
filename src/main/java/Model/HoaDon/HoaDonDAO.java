@@ -393,4 +393,173 @@ public class HoaDonDAO {
 		}
 		return null;
 	}
+
+	// Lấy đơn hàng theo mã hóa đơn
+	public List<Object[]> getDonHangByMaHD(long maHD) throws Exception {
+		List<Object[]> result = new ArrayList<>();
+		KetNoi kn = new KetNoi();
+		kn.ketnoi();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		try {
+			String sql = "SELECT MaHD, MaBan, MaNV, GioVao, GioRa, TongTien, ThanhToan, MaKH " +
+						 "FROM HoaDon " +
+						 "WHERE MaHD = ?";
+
+			ps = kn.cn.prepareStatement(sql);
+			ps.setLong(1, maHD);
+
+			rs = ps.executeQuery();
+			if (rs.next()) {
+				result.add(new Object[]{
+					rs.getLong("MaHD"),
+					rs.getLong("MaBan"),
+					rs.getLong("MaNV"),
+					rs.getTimestamp("GioVao"),
+					rs.getTimestamp("GioRa"),
+					rs.getLong("TongTien"),
+					rs.getInt("ThanhToan"),
+					rs.getLong("MaKH")
+				});
+			}
+		} finally {
+			if (rs != null) rs.close();
+			if (ps != null) ps.close();
+			kn.cn.close();
+		}
+		return result;
+	}
+
+	// Lấy đơn hàng theo bàn (đơn hàng gần nhất)
+	public List<Object[]> getDonHangByBan(long maBan) throws Exception {
+		List<Object[]> result = new ArrayList<>();
+		KetNoi kn = new KetNoi();
+		kn.ketnoi();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		try {
+			String sql = "SELECT TOP 5 MaHD, MaBan, MaNV, GioVao, GioRa, TongTien, ThanhToan, MaKH " +
+						 "FROM HoaDon " +
+						 "WHERE MaBan = ? " +
+						 "ORDER BY GioVao DESC";
+
+			ps = kn.cn.prepareStatement(sql);
+			ps.setLong(1, maBan);
+
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				result.add(new Object[]{
+					rs.getLong("MaHD"),
+					rs.getLong("MaBan"),
+					rs.getLong("MaNV"),
+					rs.getTimestamp("GioVao"),
+					rs.getTimestamp("GioRa"),
+					rs.getLong("TongTien"),
+					rs.getInt("ThanhToan"),
+					rs.getLong("MaKH")
+				});
+			}
+		} finally {
+			if (rs != null) rs.close();
+			if (ps != null) ps.close();
+			kn.cn.close();
+		}
+		return result;
+	}
+
+	// Cập nhật trạng thái thanh toán của hóa đơn
+	public boolean capNhatTrangThaiThanhToan(long maHD, int trangThai) throws Exception {
+		KetNoi kn = new KetNoi();
+		kn.ketnoi();
+		PreparedStatement ps = null;
+
+		try {
+			String sql = "UPDATE HoaDon SET ThanhToan = ? WHERE MaHD = ?";
+			ps = kn.cn.prepareStatement(sql);
+			ps.setInt(1, trangThai);
+			ps.setLong(2, maHD);
+
+			int rowsAffected = ps.executeUpdate();
+			return rowsAffected > 0;
+		} finally {
+			if (ps != null) ps.close();
+			kn.cn.close();
+		}
+	}
+
+	// Lấy danh sách đơn hàng đang chờ xác nhận thanh toán (ThanhToan = 2)
+	public List<Object[]> getDonHangChoXacNhan() throws Exception {
+		List<Object[]> result = new ArrayList<>();
+		KetNoi kn = new KetNoi();
+		kn.ketnoi();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		try {
+			String sql = "SELECT MaHD, MaBan, MaNV, GioVao, GioRa, TongTien, ThanhToan, MaKH " +
+						 "FROM HoaDon " +
+						 "WHERE ThanhToan = 2 " +
+						 "ORDER BY GioVao DESC";
+
+			ps = kn.cn.prepareStatement(sql);
+			rs = ps.executeQuery();
+
+			while (rs.next()) {
+				result.add(new Object[]{
+					rs.getLong("MaHD"),
+					rs.getLong("MaBan"),
+					rs.getLong("MaNV"),
+					rs.getTimestamp("GioVao"),
+					rs.getTimestamp("GioRa"),
+					rs.getLong("TongTien"),
+					rs.getInt("ThanhToan"),
+					rs.getLong("MaKH")
+				});
+			}
+		} finally {
+			if (rs != null) rs.close();
+			if (ps != null) ps.close();
+			kn.cn.close();
+		}
+		return result;
+	}
+
+	// Lấy danh sách đơn hàng đã thanh toán gần đây (ThanhToan = 1)
+	public List<Object[]> getDonHangDaThanhToan() throws Exception {
+		List<Object[]> result = new ArrayList<>();
+		KetNoi kn = new KetNoi();
+		kn.ketnoi();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		try {
+			String sql = "SELECT TOP 20 MaHD, MaBan, MaNV, GioVao, GioRa, TongTien, ThanhToan, MaKH " +
+						 "FROM HoaDon " +
+						 "WHERE ThanhToan = 1 " +
+						 "ORDER BY GioVao DESC";
+
+			ps = kn.cn.prepareStatement(sql);
+			rs = ps.executeQuery();
+
+			while (rs.next()) {
+				result.add(new Object[]{
+					rs.getLong("MaHD"),
+					rs.getLong("MaBan"),
+					rs.getLong("MaNV"),
+					rs.getTimestamp("GioVao"),
+					rs.getTimestamp("GioRa"),
+					rs.getLong("TongTien"),
+					rs.getInt("ThanhToan"),
+					rs.getLong("MaKH")
+				});
+			}
+		} finally {
+			if (rs != null) rs.close();
+			if (ps != null) ps.close();
+			kn.cn.close();
+		}
+		return result;
+	}
 }

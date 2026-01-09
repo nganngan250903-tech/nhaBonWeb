@@ -38,31 +38,64 @@ public class TheoDoiDonHangController extends HttpServlet {
             HoaDonBO hoaDonBO = new HoaDonBO();
             ChiTietHoaDonBO ctBO = new ChiTietHoaDonBO();
 
-            // Lay don hang gan nhat cua khach hang (co the chua thanh toan)
-            long maKH = kh.getMaKH();
+            // Lay thong tin don hang theo ban
+            // Uu tien lay tu session neu co ma hoa don vua tao
+            Long maHDGoc = (Long) session.getAttribute("maHDGoc");
 
-            // Lay thong tin don hang - co the can tao method moi
-            List<Object[]> dsDonHang = hoaDonBO.getDonHangByKhachHang(maKH);
+            if (maHDGoc != null) {
+                // Lay thong tin don hang vua tao
+                List<Object[]> dsDonHang = hoaDonBO.getDonHangByMaHD(maHDGoc);
 
-            if (dsDonHang != null && !dsDonHang.isEmpty()) {
-                // Lay don hang dau tien (co the sap xep theo thoi gian)
-                Object[] donHang = dsDonHang.get(0);
-                long maHD = (Long) donHang[0];
+                if (dsDonHang != null && !dsDonHang.isEmpty()) {
+                    Object[] donHang = dsDonHang.get(0);
+                    long maHD = (Long) donHang[0];
 
-                // Lấy chi tiết đơn hàng với trạng thái
-                List<Object[]> dsChiTiet = null;
-                try {
-                    dsChiTiet = ctBO.getChiTietByMaHD(maHD);
-                    System.out.println("Loaded " + (dsChiTiet != null ? dsChiTiet.size() : 0) + " chi tiet for MaHD: " + maHD);
-                } catch (Exception e) {
-                    System.out.println("Error loading chi tiet for MaHD " + maHD + ": " + e.getMessage());
-                    e.printStackTrace();
-                    dsChiTiet = new ArrayList<>(); // Empty list if error
+                    // Lấy chi tiết đơn hàng với trạng thái
+                    List<Object[]> dsChiTiet = null;
+                    try {
+                        dsChiTiet = ctBO.getChiTietByMaHD(maHD);
+                        System.out.println("Loaded " + (dsChiTiet != null ? dsChiTiet.size() : 0) + " chi tiet for MaHD: " + maHD);
+                    } catch (Exception e) {
+                        System.out.println("Error loading chi tiet for MaHD " + maHD + ": " + e.getMessage());
+                        e.printStackTrace();
+                        dsChiTiet = new ArrayList<>(); // Empty list if error
+                    }
+
+                    request.setAttribute("donHang", donHang);
+                    request.setAttribute("dsChiTiet", dsChiTiet);
+                    request.setAttribute("maHD", maHD);
                 }
 
-                request.setAttribute("donHang", donHang);
-                request.setAttribute("dsChiTiet", dsChiTiet);
-                request.setAttribute("maHD", maHD);
+                // Xoa session sau khi da su dung
+                session.removeAttribute("maHDGoc");
+
+            } else {
+                // Lay don hang gan nhat theo ban (mac dinh ban 1)
+                // Trong thuc te, can lay thong tin ban tu session hoac database
+                long maBan = 1; // Default ban, co the lay tu session
+
+                List<Object[]> dsDonHang = hoaDonBO.getDonHangByBan(maBan);
+
+                if (dsDonHang != null && !dsDonHang.isEmpty()) {
+                    // Lay don hang gan nhat (dau tien trong danh sach da sap xep)
+                    Object[] donHang = dsDonHang.get(0);
+                    long maHD = (Long) donHang[0];
+
+                    // Lấy chi tiết đơn hàng với trạng thái
+                    List<Object[]> dsChiTiet = null;
+                    try {
+                        dsChiTiet = ctBO.getChiTietByMaHD(maHD);
+                        System.out.println("Loaded " + (dsChiTiet != null ? dsChiTiet.size() : 0) + " chi tiet for MaHD: " + maHD);
+                    } catch (Exception e) {
+                        System.out.println("Error loading chi tiet for MaHD " + maHD + ": " + e.getMessage());
+                        e.printStackTrace();
+                        dsChiTiet = new ArrayList<>(); // Empty list if error
+                    }
+
+                    request.setAttribute("donHang", donHang);
+                    request.setAttribute("dsChiTiet", dsChiTiet);
+                    request.setAttribute("maHD", maHD);
+                }
             }
 
             request.setAttribute("khachHang", kh);

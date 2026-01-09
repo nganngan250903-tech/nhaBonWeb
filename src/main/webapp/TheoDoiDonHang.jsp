@@ -39,7 +39,7 @@
 <div class="container mt-5">
     <div class="row">
         <div class="col-12">
-            <h1 class="text-center mb-4">📋 Theo dõi đơn hàng</h1>
+            <h1 class="text-center mb-4">📋 Theo dõi đơn hàng của bàn</h1>
 
             <c:if test="${sessionScope.khachhang == null}">
                 <div class="alert alert-warning text-center">
@@ -73,6 +73,24 @@
                                         <fmt:formatDate value="${donHang[3]}" pattern="dd/MM/yyyy HH:mm"/>
                                     </p>
                                     <p><strong>Bàn số:</strong> ${donHang[1]}</p>
+                                    <p><strong>Trạng thái thanh toán:</strong>
+                                        <c:choose>
+                                            <c:when test="${donHang[6] == 0}">
+                                                <span class="badge bg-danger">Chưa thanh toán</span>
+                                            </c:when>
+                                            <c:when test="${donHang[6] == 1}">
+                                                <span class="badge bg-success">Đã thanh toán</span>
+                                            </c:when>
+                                            <c:when test="${donHang[6] == 2}">
+                                                <span class="badge bg-warning">
+                                                    <i class="fas fa-clock"></i> Chờ xác nhận thanh toán
+                                                </span>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <span class="badge bg-secondary">Không xác định</span>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -136,9 +154,24 @@
 
                     <!-- Nút thanh toán -->
                     <div class="text-center mt-4">
-                        <a href="ThanhToanController" class="btn btn-success btn-lg">
-                            💳 Thanh toán ngay
-                        </a>
+                        <c:if test="${donHang[6] == 0}">
+                            <a href="QRPayment.jsp?maBan=${donHang[1]}&tongTien=${donHang[5]}&maHD=${maHD}" class="btn btn-success btn-lg">
+                                <i class="fas fa-qrcode"></i> Thanh toán QR Code
+                            </a>
+                        </c:if>
+                        <c:if test="${donHang[6] == 1}">
+                            <div class="alert alert-success">
+                                <i class="fas fa-check-circle"></i>
+                                Đơn hàng này đã được thanh toán thành công!
+                            </div>
+                        </c:if>
+                        <c:if test="${donHang[6] == 2}">
+                            <div class="alert alert-warning">
+                                <i class="fas fa-clock"></i>
+                                Đơn hàng đang chờ xác nhận thanh toán từ nhân viên.
+                                <br><small>Vui lòng liên hệ nhân viên để được hỗ trợ.</small>
+                            </div>
+                        </c:if>
                     </div>
                 </c:if>
             </c:if>
