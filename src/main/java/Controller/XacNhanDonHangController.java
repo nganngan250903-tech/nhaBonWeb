@@ -62,12 +62,8 @@ public class XacNhanDonHangController extends HttpServlet {
         	// 3. XÓA GIỎ HÀNG SAU KHI TẠO ĐƠN THÀNH CÔNG
         	session.removeAttribute("gio");
 
-            request.setAttribute("msg",
-              "Món của bạn đã được chuyển, vui lòng theo dõi đơn hàng của mình");
-//
-//            request.getRequestDispatcher("ThanhToan.jsp")
-//               .forward(request, response);
-            response.sendRedirect("TrangChuController");
+            // Chuyển đến trang thanh toán thay vì về trang chủ
+            response.sendRedirect("PaymentController");
 
         } catch (Exception e) {
             e.printStackTrace();
