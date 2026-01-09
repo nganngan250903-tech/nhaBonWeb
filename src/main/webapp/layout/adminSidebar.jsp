@@ -42,6 +42,7 @@
 	<hr class="text-white mx-3">
 
 	<a href="AdminHomeController">🏠 Dashboard</a>
+	<a href="StatisticsController">📊 Thống kê</a>
 	<a href="QLMonController">🍽️ Quản lý Món</a>
 	<a href="DanhMucController">📂 Danh mục</a>
 	<a href="BanAdminController">🪑 Bàn ăn</a>

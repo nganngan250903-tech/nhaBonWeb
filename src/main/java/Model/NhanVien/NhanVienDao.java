@@ -1,9 +1,9 @@
 package Model.NhanVien;
 
-
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.List;
+import java.util.ArrayList;
 
 import Model.KetNoi.KetNoi;
 
@@ -54,5 +54,57 @@ public class NhanVienDao {
         ps.setString(4, nv.getPass());
 
         return ps.executeUpdate() > 0;
+    }
+
+    // Get total number of employees
+    public int getTongNhanVien() {
+        try {
+            KetNoi kn = new KetNoi();
+            kn.ketnoi();
+
+            String sql = "SELECT COUNT(*) FROM NhanVien WHERE TrangThaiNV = 1";
+            PreparedStatement ps = kn.cn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    // Get employee performance statistics
+    public List<Object[]> getThongKeNhanVien() {
+        List<Object[]> result = new ArrayList<>();
+        try {
+            KetNoi kn = new KetNoi();
+            kn.ketnoi();
+
+            String sql = "SELECT nv.TenNV, COUNT(hd.MaHD) as soHoaDon, COALESCE(SUM(hd.TongTien), 0) as tongDoanhThu " +
+                        "FROM NhanVien nv " +
+                        "LEFT JOIN HoaDon hd ON nv.MaNV = hd.MaNV AND hd.ThanhToan = 1 " +
+                        "WHERE nv.TrangThaiNV = 1 " +
+                        "GROUP BY nv.MaNV, nv.TenNV " +
+                        "ORDER BY tongDoanhThu DESC";
+
+            PreparedStatement ps = kn.cn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                result.add(new Object[]{
+                    rs.getString("TenNV") != null ? rs.getString("TenNV") : "N/A",
+                    rs.getInt("soHoaDon"),
+                    rs.getLong("tongDoanhThu")
+                });
+            }
+            rs.close();
+            ps.close();
+            kn.cn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 }
