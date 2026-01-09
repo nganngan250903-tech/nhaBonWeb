@@ -12,8 +12,8 @@ public class ChiTietHoaDonBO {
     }
 
     // Lấy chi tiết hóa đơn theo mã HD với thông tin món ăn
-    public List<Object[]> getChiTietByMaHD(long maHD) throws Exception {
-        return dao.getChiTietByMaHD(maHD);
+    public List<Object[]> getChiTietTongByBan(long maHD) throws Exception {
+        return dao.getChiTietTongByBan(maHD);
     }
 
     // Cập nhật trạng thái món ăn

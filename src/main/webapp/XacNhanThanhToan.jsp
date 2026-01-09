@@ -251,7 +251,7 @@
                 <!-- QR Code Section -->
                 <div class="text-center mb-4">
                     <div class="qr-code-container" style="background: #f8f9fa; padding: 20px; border-radius: 10px; display: inline-block;">
-                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=Thanh toán bàn ăn số <%=donHang != null ? donHang[1] : "N/A"%> - Số tiền: <%=formatter.format(tongTien != null ? tongTien : 0)%> VNĐ"
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=Thanh toán bàn ăn số VNĐ"
                              alt="QR Code thanh toán" class="img-fluid" style="max-width: 200px;">
                         <p class="mt-2 mb-0 text-muted">Quét mã QR để thanh toán</p>
                     </div>
@@ -268,8 +268,8 @@
                         </div>
                         <div class="col-md-6">
                             <p><strong>Số tiền:</strong> <span class="text-danger fw-bold"><%=formatter.format(tongTien != null ? tongTien : 0)%> VNĐ</span></p>
-                            <p><strong>Nội dung:</strong> <span class="text-primary fw-bold">Thanh toán bàn ăn số <%=donHang != null ? donHang[1] : "N/A"%></span></p>
-                            <p><strong>Mã đơn hàng:</strong> #<%=maHD != null ? maHD : "N/A"%></p>
+                            <p><strong>Nội dung:</strong> <span class="text-primary fw-bold">Thanh toán bàn ăn số </span></p>
+                            <p><strong>Mã đơn hàng:</strong> #12</p>
                         </div>
                     </div>
                 </div>

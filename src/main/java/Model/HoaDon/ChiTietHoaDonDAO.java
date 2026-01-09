@@ -13,7 +13,7 @@ public class ChiTietHoaDonDAO {
         kn.ketnoi();
 
         String sql =
-          "INSERT INTO ChiTietHoaDon(MaHD, MaMon, SoLuong, DonGia, TrangThai, ChietKhau) " +
+          "INSERT INTO CTHD(MaHD, MaMon, SoLuong, DonGia, TrangThai, ChietKhau) " +
           "VALUES (?, ?, ?, ?, ?, ?)";
 
         PreparedStatement ps = kn.cn.prepareStatement(sql);
@@ -30,56 +30,49 @@ public class ChiTietHoaDonDAO {
         kn.cn.close();
     }
 
-    // Lấy chi tiết hóa đơn theo mã HD với thông tin món ăn
-    public List<Object[]> getChiTietByMaHD(long maHD) throws Exception {
-        List<Object[]> result = new ArrayList<>();
-        KetNoi kn = new KetNoi();
-        kn.ketnoi();
-        PreparedStatement ps = null;
-        ResultSet rs = null;
+    public List<Object[]> getChiTietTongByBan(long maBan) throws Exception {
+	    List<Object[]> result = new ArrayList<>();
+	    KetNoi kn = new KetNoi();
+	    kn.ketnoi();
 
-        try {
-            String sql = "SELECT ct.MaCTHD, ct.MaHD, ct.MaMon, ct.SoLuong, ct.DonGia, ct.TrangThai, ct.ChietKhau, " +
-                         "m.TenMon, m.HinhAnh " +
-                         "FROM ChiTietHoaDon ct " +
-                         "JOIN MonAn m ON ct.MaMon = m.MaMon " +
-                         "WHERE ct.MaHD = ? " +
-                         "ORDER BY ct.TrangThai ASC, m.TenMon ASC";
+	    String sql =
+	        "SELECT cthd.MaCTHD, cthd.MaHD, cthd.MaMon, m.TenMon, m.HinhAnh, " +
+	        "cthd.SoLuong, cthd.DonGia, cthd.TrangThai " +
+	        "FROM CTHD cthd " +
+	        "JOIN HoaDon hd ON cthd.MaHD = hd.MaHD " +
+	        "JOIN MonAn m ON cthd.MaMon = m.MaMon " +
+	        "WHERE hd.MaBan = ? " +
+	        "ORDER BY hd.GioVao ASC, cthd.MaCTHD ASC";
 
-            ps = kn.cn.prepareStatement(sql);
-            ps.setLong(1, maHD);
+	    PreparedStatement ps = kn.cn.prepareStatement(sql);
+	    ps.setLong(1, maBan);
 
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                result.add(new Object[]{
-                    rs.getLong("MaCTHD"),
-                    rs.getLong("MaHD"),
-                    rs.getLong("MaMon"),
-                    rs.getString("TenMon") != null ? rs.getString("TenMon") : "",
-                    rs.getString("HinhAnh") != null ? rs.getString("HinhAnh") : "",
-                    rs.getInt("SoLuong"),
-                    rs.getLong("DonGia"),
-                    rs.getInt("TrangThai"),
-                    rs.getLong("ChietKhau")
-                });
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw e;
-        } finally {
-            if (rs != null) rs.close();
-            if (ps != null) ps.close();
-            if (kn.cn != null) kn.cn.close();
-        }
-        return result;
-    }
+	    ResultSet rs = ps.executeQuery();
+	    while (rs.next()) {
+	        result.add(new Object[]{
+	            rs.getLong("MaCTHD"),   // [0]
+	            rs.getLong("MaHD"),     // [1]
+	            rs.getLong("MaMon"),    // [2]
+	            rs.getString("TenMon"), // [3]
+	            rs.getString("HinhAnh"),    // [4]
+	            rs.getInt("SoLuong"),   // [5]
+	            rs.getLong("DonGia"),   // [6]
+	            rs.getInt("TrangThai")  // [7]
+	        });
+	    }
+
+	    rs.close();
+	    ps.close();
+	    kn.cn.close();
+	    return result;
+	}
 
     // Cập nhật trạng thái món ăn
     public boolean capNhatTrangThai(long maCTHD, int trangThai) throws Exception {
         KetNoi kn = new KetNoi();
         kn.ketnoi();
 
-        String sql = "UPDATE ChiTietHoaDon SET TrangThai = ? WHERE MaCTHD = ?";
+        String sql = "UPDATE CTHD SET TrangThai = ? WHERE MaCTHD = ?";
         PreparedStatement ps = kn.cn.prepareStatement(sql);
         ps.setInt(1, trangThai);
         ps.setLong(2, maCTHD);
@@ -102,7 +95,7 @@ public class ChiTietHoaDonDAO {
         try {
             String sql = "SELECT ct.MaCTHD, ct.MaHD, ct.MaMon, m.TenMon, ct.SoLuong, ct.DonGia, ct.TrangThai, ct.ChietKhau, " +
                         "hd.GioVao, hd.ThanhToan " +
-                        "FROM ChiTietHoaDon ct " +
+                        "FROM CTHD ct " +
                         "JOIN MonAn m ON ct.MaMon = m.MaMon " +
                         "JOIN HoaDon hd ON ct.MaHD = hd.MaHD " +
                         "WHERE ct.TrangThai = ? AND hd.ThanhToan = 3 " + // Chỉ lấy đơn hàng đang ăn

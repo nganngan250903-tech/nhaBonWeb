@@ -15,6 +15,7 @@ import Model.HoaDon.ChiTietHoaDon;
 import Model.HoaDon.ChiTietHoaDonDAO;
 import Model.HoaDon.HoaDon;
 import Model.HoaDon.HoaDonBO;
+import Model.HoaDon.HoaDonDAO;
 
 /**
  * Servlet implementation class DonHangController
@@ -26,7 +27,7 @@ public class DonHangController extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession session = request.getSession();
-
+        
         // Kiểm tra đăng nhập khách hàng
         Model.KhachHang.KhachHang kh = (Model.KhachHang.KhachHang) session.getAttribute("khachhang");
         if (kh == null) {
@@ -92,7 +93,7 @@ public class DonHangController extends HttpServlet {
             long tongTienTemp = gio.tongTien();
 
             // Tao hoa don moi voi trang thai "dang an" (3)
-            HoaDonBO hdBo = new HoaDonBO();
+            HoaDonDAO hdDao = new HoaDonDAO();
             HoaDon hd = new HoaDon();
             hd.setMaBan(maBan);
             hd.setMaNV(1L);
@@ -100,7 +101,7 @@ public class DonHangController extends HttpServlet {
             hd.setGioVao(new java.sql.Timestamp(System.currentTimeMillis()));
             hd.setTongTien(tongTienTemp); // Tam thoi, se cap nhat sau
             hd.setThanhToan(3); // 3 = dang an
-            long maHD = hdBo.themHoaDon(hd);
+            long maHD = hdDao.themHoaDon(hd);
 
             if (maHD <= 0) {
                 request.setAttribute("error", "Khong the tao hoa don!");
@@ -167,7 +168,7 @@ public class DonHangController extends HttpServlet {
                     tongTienCapNhat += (long) soLuong * item.getGia();
                 }
             }
-
+            HoaDonBO hdBo = new HoaDonBO();
             // Cap nhat tong tien trong HoaDon
             hdBo.capNhatTongTien(maHD, tongTienCapNhat);
 
