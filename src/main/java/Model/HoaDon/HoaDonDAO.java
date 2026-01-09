@@ -489,6 +489,26 @@ public class HoaDonDAO {
 		}
 	}
 
+	// Cập nhật trạng thái thanh toán cho tất cả hóa đơn của một bàn
+	public int capNhatTrangThaiThanhToanByBan(long maBan, int trangThai) throws Exception {
+		KetNoi kn = new KetNoi();
+		kn.ketnoi();
+		PreparedStatement ps = null;
+
+		try {
+			String sql = "UPDATE HoaDon SET ThanhToan = ? WHERE MaBan = ? AND ThanhToan != 1"; // Chỉ cập nhật hóa đơn chưa thanh toán
+			ps = kn.cn.prepareStatement(sql);
+			ps.setInt(1, trangThai);
+			ps.setLong(2, maBan);
+
+			int rowsAffected = ps.executeUpdate();
+			return rowsAffected;
+		} finally {
+			if (ps != null) ps.close();
+			kn.cn.close();
+		}
+	}
+
 	// Cập nhật tổng tiền của hóa đơn
 	public boolean capNhatTongTien(long maHD, long tongTien) throws Exception {
 		KetNoi kn = new KetNoi();
@@ -648,6 +668,39 @@ public class HoaDonDAO {
 					rs.getLong("TongTien"),
 					rs.getInt("ThanhToan"),
 					rs.getLong("MaKH")
+				});
+			}
+		} finally {
+			if (rs != null) rs.close();
+			if (ps != null) ps.close();
+			kn.cn.close();
+		}
+		return result;
+	}
+
+	// Lấy danh sách bàn có đơn hàng đang chờ thanh toán hoặc đang ăn
+	public List<Object[]> getDanhSachBanCoDonHang() throws Exception {
+		List<Object[]> result = new ArrayList<>();
+		KetNoi kn = new KetNoi();
+		kn.ketnoi();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		try {
+			String sql = "SELECT DISTINCT MaBan, COUNT(*) as SoDonHang, SUM(TongTien) as TongTienBan " +
+						 "FROM HoaDon " +
+						 "WHERE ThanhToan IN (2, 3) " + // 2: chờ xác nhận, 3: đang ăn
+						 "GROUP BY MaBan " +
+						 "ORDER BY MaBan";
+
+			ps = kn.cn.prepareStatement(sql);
+			rs = ps.executeQuery();
+
+			while (rs.next()) {
+				result.add(new Object[]{
+					rs.getLong("MaBan"),
+					rs.getInt("SoDonHang"),
+					rs.getLong("TongTienBan")
 				});
 			}
 		} finally {

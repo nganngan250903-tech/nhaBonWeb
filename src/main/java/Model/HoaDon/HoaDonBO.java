@@ -91,6 +91,11 @@ public class HoaDonBO {
 		return dao.capNhatTrangThaiThanhToan(maHD, trangThai);
 	}
 
+	// Cập nhật trạng thái thanh toán cho tất cả hóa đơn của một bàn
+	public int capNhatTrangThaiThanhToanByBan(long maBan, int trangThai) throws Exception {
+		return dao.capNhatTrangThaiThanhToanByBan(maBan, trangThai);
+	}
+
 	// Cập nhật tổng tiền của hóa đơn
 	public boolean capNhatTongTien(long maHD, long tongTien) throws Exception {
 		return dao.capNhatTongTien(maHD, tongTien);
@@ -114,5 +119,10 @@ public class HoaDonBO {
 	// Lấy danh sách đơn hàng đang ăn
 	public List<Object[]> getDonHangDangAn() throws Exception {
 		return dao.getDonHangDangAn();
+	}
+
+	// Lấy danh sách bàn có đơn hàng đang chờ thanh toán hoặc đang ăn
+	public List<Object[]> getDanhSachBanCoDonHang() throws Exception {
+		return dao.getDanhSachBanCoDonHang();
 	}
 }
