@@ -186,12 +186,8 @@
                                     <p><strong>Số điện thoại:</strong> <%=((Model.KhachHang.KhachHang)request.getAttribute("khachHang")).getSdt()%></p>
                                 </div>
                                 <div class="col-md-6">
-                                    <p><strong>Email:</strong>
-                                        <%=((Model.KhachHang.KhachHang)request.getAttribute("khachHang")).getEmail() != null ?
-                                           ((Model.KhachHang.KhachHang)request.getAttribute("khachHang")).getEmail() : "Chưa cập nhật"%></p>
-                                    <p><strong>Địa chỉ:</strong>
-                                        <%=((Model.KhachHang.KhachHang)request.getAttribute("khachHang")).getDiaChi() != null ?
-                                           ((Model.KhachHang.KhachHang)request.getAttribute("khachHang")).getDiaChi() : "Chưa cập nhật"%></p>
+                                    <p><strong>Mã khách hàng:</strong> #<%=((Model.KhachHang.KhachHang)request.getAttribute("khachHang")).getMaKH()%></p>
+                                    <p><strong>Trạng thái:</strong> <span class="badge bg-success">Đã đăng nhập</span></p>
                                 </div>
                             </div>
                             <div class="alert alert-info mt-2">

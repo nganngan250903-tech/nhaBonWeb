@@ -134,6 +134,13 @@ public class TheoDoiDonHangController extends HttpServlet {
                 }
             }
 
+            // Lay thong bao thanh cong tu session (neu co)
+            String success = (String) session.getAttribute("success");
+            if (success != null) {
+                request.setAttribute("success", success);
+                session.removeAttribute("success"); // Xoa sau khi da su dung
+            }
+
             request.setAttribute("khachHang", kh);
             request.setAttribute("activeMenu", "theodoi");
             request.getRequestDispatcher("TheoDoiDonHang.jsp").forward(request, response);

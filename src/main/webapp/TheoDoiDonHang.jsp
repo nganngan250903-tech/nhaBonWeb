@@ -41,6 +41,14 @@
         <div class="col-12">
             <h1 class="text-center mb-4">📋 Theo dõi đơn hàng của bàn</h1>
 
+            <!-- SUCCESS MESSAGE -->
+            <c:if test="${not empty success}">
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="fas fa-check-circle"></i> ${success}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            </c:if>
+
             <c:if test="${sessionScope.khachhang == null}">
                 <div class="alert alert-warning text-center">
                     <h4>Vui lòng đăng nhập để theo dõi đơn hàng</h4>
@@ -107,6 +115,26 @@
                                             </c:when>
                                             <c:otherwise>
                                                 <span class="badge bg-secondary">Không xác định</span>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </p>
+
+                                    <p><strong>Trạng thái món ăn:</strong>
+                                        <c:choose>
+                                            <c:when test="${hasCompletedItems and not hasProcessingItems}">
+                                                <span class="badge bg-success">
+                                                    <i class="fas fa-check-circle"></i> Đã làm xong
+                                                </span>
+                                            </c:when>
+                                            <c:when test="${hasProcessingItems}">
+                                                <span class="badge bg-warning">
+                                                    <i class="fas fa-clock"></i> Đang làm
+                                                </span>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <span class="badge bg-info">
+                                                    <i class="fas fa-utensils"></i> Đã đặt món
+                                                </span>
                                             </c:otherwise>
                                         </c:choose>
                                     </p>
