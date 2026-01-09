@@ -8,6 +8,7 @@
     NumberFormat formatter = NumberFormat.getInstance(new Locale("vi", "VN"));
     List<Object[]> dsChoXacNhan = (List<Object[]>) request.getAttribute("dsChoXacNhan");
     List<Object[]> dsDaThanhToan = (List<Object[]>) request.getAttribute("dsDaThanhToan");
+    List<Object[]> dsDangAn = (List<Object[]>) request.getAttribute("dsDangAn");
     String success = (String) request.getAttribute("success");
     String error = (String) request.getAttribute("error");
 %>
@@ -52,6 +53,12 @@
             background-color: #f8d7da;
             color: #721c24;
             border: 1px solid #f5c6cb;
+        }
+
+        .status-info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
         }
 
         .btn-confirm {
@@ -135,26 +142,88 @@
         <!-- PAYMENT SUMMARY -->
         <div class="payment-summary">
             <div class="row">
-                <div class="col-md-4 summary-stat">
+                <div class="col-md-3 summary-stat">
+                    <div class="summary-number">
+                        <%= dsDangAn != null ? dsDangAn.size() : 0 %>
+                    </div>
+                    <div class="summary-label">Đơn đang ăn</div>
+                </div>
+                <div class="col-md-3 summary-stat">
                     <div class="summary-number">
                         <%= dsChoXacNhan != null ? dsChoXacNhan.size() : 0 %>
                     </div>
                     <div class="summary-label">Đơn chờ xác nhận</div>
                 </div>
-                <div class="col-md-4 summary-stat">
+                <div class="col-md-3 summary-stat">
                     <div class="summary-number">
                         <%= dsDaThanhToan != null ? dsDaThanhToan.size() : 0 %>
                     </div>
                     <div class="summary-label">Đơn đã thanh toán</div>
                 </div>
-                <div class="col-md-4 summary-stat">
+                <div class="col-md-3 summary-stat">
                     <div class="summary-number">
-                        <%=formatter.format((dsChoXacNhan != null ? dsChoXacNhan.size() : 0) +
+                        <%=formatter.format((dsDangAn != null ? dsDangAn.size() : 0) +
+                           (dsChoXacNhan != null ? dsChoXacNhan.size() : 0) +
                            (dsDaThanhToan != null ? dsDaThanhToan.size() : 0))%>
                     </div>
                     <div class="summary-label">Tổng đơn hàng</div>
                 </div>
             </div>
+        </div>
+
+        <!-- DINING ORDERS -->
+        <div class="payment-card">
+            <h5 class="mb-3">
+                <i class="fas fa-utensils text-info"></i> Đơn hàng đang ăn
+                <span class="badge bg-info ms-2"><%= dsDangAn != null ? dsDangAn.size() : 0 %></span>
+            </h5>
+
+            <% if (dsDangAn == null || dsDangAn.isEmpty()) { %>
+            <div class="text-center py-4">
+                <i class="fas fa-utensils fa-3x text-muted mb-3"></i>
+                <h5>Không có đơn hàng đang ăn</h5>
+                <p class="text-muted">Khách hàng đang đặt món sẽ hiển thị ở đây</p>
+            </div>
+            <% } else { %>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Mã HD</th>
+                            <th>Bàn</th>
+                            <th>Thời gian đặt</th>
+                            <th>Tổng tiền</th>
+                            <th>Trạng thái</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% for (Object[] donHang : dsDangAn) { %>
+                        <tr>
+                            <td><strong>#<%=donHang[0]%></strong></td>
+                            <td>Bàn <%=donHang[1]%></td>
+                            <td>
+                                <jsp:useBean id="dateValueDining" class="java.util.Date"/>
+                                <jsp:setProperty name="dateValueDining" property="time" value="<%=((java.sql.Timestamp)donHang[3]).getTime()%>"/>
+                                <fmt:formatDate value="${dateValueDining}" pattern="dd/MM/yyyy HH:mm"/>
+                            </td>
+                            <td class="fw-bold text-info"><%=formatter.format(donHang[5])%> VNĐ</td>
+                            <td>
+                                <span class="status-badge status-info">
+                                    <i class="fas fa-utensils"></i> Đang ăn
+                                </span>
+                            </td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-info" onclick="viewOrderDetails('<%=donHang[0]%>')">
+                                    <i class="fas fa-eye"></i> Xem chi tiết
+                                </button>
+                            </td>
+                        </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+            <% } %>
         </div>
 
         <!-- PENDING PAYMENTS -->
@@ -278,6 +347,11 @@
 
     <!-- Auto refresh every 30 seconds -->
     <script>
+        function viewOrderDetails(maHD) {
+            // Có thể mở modal hoặc chuyển đến trang chi tiết đơn hàng
+            alert('Xem chi tiết đơn hàng #' + maHD + '\nTính năng này sẽ được phát triển thêm!');
+        }
+
         setTimeout(function() {
             location.reload();
         }, 30000); // 30 seconds

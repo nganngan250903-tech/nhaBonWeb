@@ -38,58 +38,94 @@ public class TheoDoiDonHangController extends HttpServlet {
             HoaDonBO hoaDonBO = new HoaDonBO();
             ChiTietHoaDonBO ctBO = new ChiTietHoaDonBO();
 
-            // Lay thong tin don hang theo ban
-            // Uu tien lay tu session neu co ma hoa don vua tao
-            Long maHDGoc = (Long) session.getAttribute("maHDGoc");
+                // Lay thong tin don hang theo ban
+                // Uu tien lay tu session neu co ma hoa don vua tao
+                Long maHDGoc = (Long) session.getAttribute("maHDGoc");
 
-            if (maHDGoc != null) {
-                // Lay thong tin don hang vua tao
-                List<Object[]> dsDonHang = hoaDonBO.getDonHangByMaHD(maHDGoc);
+                if (maHDGoc != null) {
+                    // Lay thong tin don hang vua tao
+                    List<Object[]> dsDonHang = hoaDonBO.getDonHangByMaHD(maHDGoc);
 
-                if (dsDonHang != null && !dsDonHang.isEmpty()) {
-                    Object[] donHang = dsDonHang.get(0);
-                    long maHD = (Long) donHang[0];
+                    if (dsDonHang != null && !dsDonHang.isEmpty()) {
+                        Object[] donHang = dsDonHang.get(0);
+                        long maHD = (Long) donHang[0];
 
-                    // Lấy chi tiết đơn hàng với trạng thái
-                    List<Object[]> dsChiTiet = null;
-                    try {
-                        dsChiTiet = ctBO.getChiTietByMaHD(maHD);
-                        System.out.println("Loaded " + (dsChiTiet != null ? dsChiTiet.size() : 0) + " chi tiet for MaHD: " + maHD);
-                    } catch (Exception e) {
-                        System.out.println("Error loading chi tiet for MaHD " + maHD + ": " + e.getMessage());
-                        e.printStackTrace();
-                        dsChiTiet = new ArrayList<>(); // Empty list if error
+                        // Lấy chi tiết đơn hàng với trạng thái từng món
+                        List<Object[]> dsChiTiet = null;
+                        try {
+                            dsChiTiet = ctBO.getChiTietByMaHD(maHD);
+                            System.out.println("Loaded " + (dsChiTiet != null ? dsChiTiet.size() : 0) + " chi tiet món ăn for MaHD: " + maHD);
+
+                            // Phân tích trạng thái các món
+                            boolean hasProcessingItems = false;
+                            boolean hasCompletedItems = false;
+                            if (dsChiTiet != null) {
+                                for (Object[] item : dsChiTiet) {
+                                    if (item.length >= 8) {
+                                        int trangThai = (Integer) item[7]; // Index 7 là trạng thái món
+                                        if (trangThai == 0) hasProcessingItems = true;
+                                        else if (trangThai == 1) hasCompletedItems = true;
+                                    }
+                                }
+                            }
+
+                            request.setAttribute("hasProcessingItems", hasProcessingItems);
+                            request.setAttribute("hasCompletedItems", hasCompletedItems);
+
+                        } catch (Exception e) {
+                            System.out.println("Error loading chi tiet món ăn for MaHD " + maHD + ": " + e.getMessage());
+                            e.printStackTrace();
+                            dsChiTiet = new ArrayList<>();
+                        }
+
+                        request.setAttribute("donHang", donHang);
+                        request.setAttribute("dsChiTiet", dsChiTiet);
+                        request.setAttribute("maHD", maHD);
                     }
 
-                    request.setAttribute("donHang", donHang);
-                    request.setAttribute("dsChiTiet", dsChiTiet);
-                    request.setAttribute("maHD", maHD);
+                    // Xoa session sau khi da su dung
+                    session.removeAttribute("maHDGoc");
+
+                } else {
+                // Lay ma ban tu session
+                Long maBan = (Long) session.getAttribute("maBan");
+                if (maBan == null) {
+                    maBan = 1L; // Fallback neu khong co trong session
                 }
 
-                // Xoa session sau khi da su dung
-                session.removeAttribute("maHDGoc");
-
-            } else {
-                // Lay don hang gan nhat theo ban (mac dinh ban 1)
-                // Trong thuc te, can lay thong tin ban tu session hoac database
-                long maBan = 1; // Default ban, co the lay tu session
-
-                List<Object[]> dsDonHang = hoaDonBO.getDonHangByBan(maBan);
+                List<Object[]> dsDonHang = hoaDonBO.getDonHangDangAnByBan(maBan);
 
                 if (dsDonHang != null && !dsDonHang.isEmpty()) {
                     // Lay don hang gan nhat (dau tien trong danh sach da sap xep)
                     Object[] donHang = dsDonHang.get(0);
                     long maHD = (Long) donHang[0];
 
-                    // Lấy chi tiết đơn hàng với trạng thái
+                    // Lấy chi tiết đơn hàng với trạng thái từng món
                     List<Object[]> dsChiTiet = null;
                     try {
                         dsChiTiet = ctBO.getChiTietByMaHD(maHD);
-                        System.out.println("Loaded " + (dsChiTiet != null ? dsChiTiet.size() : 0) + " chi tiet for MaHD: " + maHD);
+                        System.out.println("Loaded " + (dsChiTiet != null ? dsChiTiet.size() : 0) + " chi tiet món ăn for MaHD: " + maHD);
+
+                        // Phân tích trạng thái các món
+                        boolean hasProcessingItems = false;
+                        boolean hasCompletedItems = false;
+                        if (dsChiTiet != null) {
+                            for (Object[] item : dsChiTiet) {
+                                if (item.length >= 8) {
+                                    int trangThai = (Integer) item[7]; // Index 7 là trạng thái món
+                                    if (trangThai == 0) hasProcessingItems = true;
+                                    else if (trangThai == 1) hasCompletedItems = true;
+                                }
+                            }
+                        }
+
+                        request.setAttribute("hasProcessingItems", hasProcessingItems);
+                        request.setAttribute("hasCompletedItems", hasCompletedItems);
+
                     } catch (Exception e) {
-                        System.out.println("Error loading chi tiet for MaHD " + maHD + ": " + e.getMessage());
+                        System.out.println("Error loading chi tiet món ăn for MaHD " + maHD + ": " + e.getMessage());
                         e.printStackTrace();
-                        dsChiTiet = new ArrayList<>(); // Empty list if error
+                        dsChiTiet = new ArrayList<>();
                     }
 
                     request.setAttribute("donHang", donHang);

@@ -75,15 +75,21 @@ public class DonHangController extends HttpServlet {
                 return;
             }
 
-            // Tao hoa don moi
+            // Lay ma ban tu session
+            Long maBan = (Long) session.getAttribute("maBan");
+            if (maBan == null) {
+                maBan = 1L; // Fallback neu khong co trong session
+            }
+
+            // Tao hoa don moi voi trang thai "dang an" (3)
             HoaDonDAO hdDao = new HoaDonDAO();
             HoaDon hd = new HoaDon();
-            hd.setMaBan(1L);
+            hd.setMaBan(maBan);
             hd.setMaNV(1L);
             hd.setMaKH(kh.getMaKH());
             hd.setGioVao(new java.sql.Timestamp(System.currentTimeMillis()));
             hd.setTongTien(gio.tongTien());
-            hd.setThanhToan(0);
+            hd.setThanhToan(3); // 3 = dang an
             long maHD = hdDao.themHoaDon(hd);
 
             if (maHD <= 0) {
@@ -116,13 +122,12 @@ public class DonHangController extends HttpServlet {
                 }
             }
 
-            // Xoa cac session lien quan sau khi dat hang thanh cong
-            session.removeAttribute("gio");
-            session.removeAttribute("tongTienThanhToan");
-            session.removeAttribute("soLuongMon");
-
-            // Luu ma hoa don vao session de theo doi
+            // Luu ma hoa don vao session de theo doi (khong xoa gio hang vi co the dat them)
             session.setAttribute("maHDGoc", maHD);
+            session.setAttribute("trangThaiDonHang", 3); // dang an
+
+            // Cap nhat tong tien trong session
+            session.setAttribute("tongTienThanhToan", gio.tongTien());
 
             // Chuyển đến trang theo dõi đơn hàng
             response.sendRedirect("TheoDoiDonHangController");

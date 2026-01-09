@@ -43,6 +43,7 @@
 
 	<a href="StatisticsController">📊 Thống kê</a>
 	<a href="AdminPaymentController">💳 Quản lý thanh toán</a>
+	<a href="AdminDishStatusController">👨‍🍳 Trạng thái món ăn</a>
 	<a href="QLMonController">🍽️ Quản lý Món</a>
 	<a href="QLDanhMucController">📂 Danh mục</a>
 	<a href="QLBanController">🪑 Bàn ăn</a>

@@ -562,4 +562,79 @@ public class HoaDonDAO {
 		}
 		return result;
 	}
+
+	// Lấy đơn hàng đang ăn theo bàn (ThanhToan = 3)
+	public List<Object[]> getDonHangDangAnByBan(long maBan) throws Exception {
+		List<Object[]> result = new ArrayList<>();
+		KetNoi kn = new KetNoi();
+		kn.ketnoi();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		try {
+			String sql = "SELECT TOP 1 MaHD, MaBan, MaNV, GioVao, GioRa, TongTien, ThanhToan, MaKH " +
+						 "FROM HoaDon " +
+						 "WHERE MaBan = ? AND ThanhToan = 3 " +
+						 "ORDER BY GioVao DESC";
+
+			ps = kn.cn.prepareStatement(sql);
+			ps.setLong(1, maBan);
+
+			rs = ps.executeQuery();
+			if (rs.next()) {
+				result.add(new Object[]{
+					rs.getLong("MaHD"),
+					rs.getLong("MaBan"),
+					rs.getLong("MaNV"),
+					rs.getTimestamp("GioVao"),
+					rs.getTimestamp("GioRa"),
+					rs.getLong("TongTien"),
+					rs.getInt("ThanhToan"),
+					rs.getLong("MaKH")
+				});
+			}
+		} finally {
+			if (rs != null) rs.close();
+			if (ps != null) ps.close();
+			kn.cn.close();
+		}
+		return result;
+	}
+
+	// Lấy danh sách đơn hàng đang ăn (ThanhToan = 3)
+	public List<Object[]> getDonHangDangAn() throws Exception {
+		List<Object[]> result = new ArrayList<>();
+		KetNoi kn = new KetNoi();
+		kn.ketnoi();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		try {
+			String sql = "SELECT MaHD, MaBan, MaNV, GioVao, GioRa, TongTien, ThanhToan, MaKH " +
+						 "FROM HoaDon " +
+						 "WHERE ThanhToan = 3 " +
+						 "ORDER BY GioVao DESC";
+
+			ps = kn.cn.prepareStatement(sql);
+			rs = ps.executeQuery();
+
+			while (rs.next()) {
+				result.add(new Object[]{
+					rs.getLong("MaHD"),
+					rs.getLong("MaBan"),
+					rs.getLong("MaNV"),
+					rs.getTimestamp("GioVao"),
+					rs.getTimestamp("GioRa"),
+					rs.getLong("TongTien"),
+					rs.getInt("ThanhToan"),
+					rs.getLong("MaKH")
+				});
+			}
+		} finally {
+			if (rs != null) rs.close();
+			if (ps != null) ps.close();
+			kn.cn.close();
+		}
+		return result;
+	}
 }

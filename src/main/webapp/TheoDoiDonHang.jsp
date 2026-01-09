@@ -86,6 +86,25 @@
                                                     <i class="fas fa-clock"></i> Chờ xác nhận thanh toán
                                                 </span>
                                             </c:when>
+                                            <c:when test="${donHang[6] == 3}">
+                                                <c:choose>
+                                                    <c:when test="${hasCompletedItems and not hasProcessingItems}">
+                                                        <span class="badge bg-success">
+                                                            <i class="fas fa-check-circle"></i> Đã hoàn thành
+                                                        </span>
+                                                    </c:when>
+                                                    <c:when test="${hasProcessingItems}">
+                                                        <span class="badge bg-warning">
+                                                            <i class="fas fa-clock"></i> Đang chế biến
+                                                        </span>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <span class="badge bg-info">
+                                                            <i class="fas fa-utensils"></i> Đã đặt món
+                                                        </span>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </c:when>
                                             <c:otherwise>
                                                 <span class="badge bg-secondary">Không xác định</span>
                                             </c:otherwise>
@@ -127,13 +146,17 @@
                                                 <td>
                                                     <c:choose>
                                                         <c:when test="${ct[7] == 0}">
-                                                            <span class="status-badge status-doing">🔄 Đang thực hiện</span>
+                                                            <span class="status-badge status-doing">
+                                                                <i class="fas fa-spinner fa-spin"></i> Đang làm
+                                                            </span>
                                                         </c:when>
                                                         <c:when test="${ct[7] == 1}">
-                                                            <span class="status-badge status-done">✅ Đã hoàn thành</span>
+                                                            <span class="status-badge status-done">
+                                                                <i class="fas fa-check-circle"></i> Đã xong
+                                                            </span>
                                                         </c:when>
                                                         <c:otherwise>
-                                                            <span class="badge bg-secondary">Không xác định</span>
+                                                            <span class="badge bg-secondary">Chờ xử lý</span>
                                                         </c:otherwise>
                                                     </c:choose>
                                                 </td>
@@ -170,6 +193,23 @@
                                 <i class="fas fa-clock"></i>
                                 Đơn hàng đang chờ xác nhận thanh toán từ nhân viên.
                                 <br><small>Vui lòng liên hệ nhân viên để được hỗ trợ.</small>
+                            </div>
+                        </c:if>
+                        <c:if test="${donHang[6] == 3 and hasCompletedItems}">
+                            <a href="PaymentController" class="btn btn-success btn-lg">
+                                <i class="fas fa-credit-card"></i> Thanh toán ngay
+                            </a>
+                            <div class="alert alert-info mt-3">
+                                <i class="fas fa-info-circle"></i>
+                                <small>Nhấn nút "Thanh toán ngay" khi bạn đã ăn xong các món đã hoàn thành.</small>
+                            </div>
+                        </c:if>
+
+                        <c:if test="${donHang[6] == 3 and not hasCompletedItems and hasProcessingItems}">
+                            <div class="alert alert-warning">
+                                <i class="fas fa-clock"></i>
+                                <strong>Đang chế biến món ăn</strong><br>
+                                <small>Vui lòng chờ nhà bếp hoàn thành món ăn trước khi thanh toán.</small>
                             </div>
                         </c:if>
                     </div>

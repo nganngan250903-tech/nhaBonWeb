@@ -100,4 +100,14 @@ public class HoaDonBO {
 	public List<Object[]> getDonHangDaThanhToan() throws Exception {
 		return dao.getDonHangDaThanhToan();
 	}
+
+	// Lấy đơn hàng đang ăn theo bàn
+	public List<Object[]> getDonHangDangAnByBan(long maBan) throws Exception {
+		return dao.getDonHangDangAnByBan(maBan);
+	}
+
+	// Lấy danh sách đơn hàng đang ăn
+	public List<Object[]> getDonHangDangAn() throws Exception {
+		return dao.getDonHangDangAn();
+	}
 }
