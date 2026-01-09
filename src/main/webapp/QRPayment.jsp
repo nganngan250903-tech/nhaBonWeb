@@ -8,12 +8,12 @@
 <%
     NumberFormat formatter = NumberFormat.getInstance(new Locale("vi", "VN"));
 
-    // Lấy thông tin từ request parameters hoặc session
+    // Lấy thông tin từ request parameters
     String maBan = request.getParameter("maBan");
     String tongTienStr = request.getParameter("tongTien");
     String maHD = request.getParameter("maHD");
 
-    // Nếu không có trong parameters, thử lấy từ session
+    // Nếu không có trong parameters, lấy từ session
     if (maBan == null) {
         Object maBanObj = session.getAttribute("maBan");
         maBan = maBanObj != null ? maBanObj.toString() : "1";

@@ -20,4 +20,9 @@ public class ChiTietHoaDonBO {
     public boolean capNhatTrangThai(long maCTHD, int trangThai) throws Exception {
         return dao.capNhatTrangThai(maCTHD, trangThai);
     }
+
+    // Lấy chi tiết hóa đơn theo trạng thái
+    public List<Object[]> getChiTietByTrangThai(int trangThai) throws Exception {
+        return dao.getChiTietByTrangThai(trangThai);
+    }
 }

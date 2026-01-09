@@ -489,6 +489,26 @@ public class HoaDonDAO {
 		}
 	}
 
+	// Cập nhật tổng tiền của hóa đơn
+	public boolean capNhatTongTien(long maHD, long tongTien) throws Exception {
+		KetNoi kn = new KetNoi();
+		kn.ketnoi();
+		PreparedStatement ps = null;
+
+		try {
+			String sql = "UPDATE HoaDon SET TongTien = ? WHERE MaHD = ?";
+			ps = kn.cn.prepareStatement(sql);
+			ps.setLong(1, tongTien);
+			ps.setLong(2, maHD);
+
+			int rowsAffected = ps.executeUpdate();
+			return rowsAffected > 0;
+		} finally {
+			if (ps != null) ps.close();
+			kn.cn.close();
+		}
+	}
+
 	// Lấy danh sách đơn hàng đang chờ xác nhận thanh toán (ThanhToan = 2)
 	public List<Object[]> getDonHangChoXacNhan() throws Exception {
 		List<Object[]> result = new ArrayList<>();
@@ -538,6 +558,81 @@ public class HoaDonDAO {
 			String sql = "SELECT TOP 20 MaHD, MaBan, MaNV, GioVao, GioRa, TongTien, ThanhToan, MaKH " +
 						 "FROM HoaDon " +
 						 "WHERE ThanhToan = 1 " +
+						 "ORDER BY GioVao DESC";
+
+			ps = kn.cn.prepareStatement(sql);
+			rs = ps.executeQuery();
+
+			while (rs.next()) {
+				result.add(new Object[]{
+					rs.getLong("MaHD"),
+					rs.getLong("MaBan"),
+					rs.getLong("MaNV"),
+					rs.getTimestamp("GioVao"),
+					rs.getTimestamp("GioRa"),
+					rs.getLong("TongTien"),
+					rs.getInt("ThanhToan"),
+					rs.getLong("MaKH")
+				});
+			}
+		} finally {
+			if (rs != null) rs.close();
+			if (ps != null) ps.close();
+			kn.cn.close();
+		}
+		return result;
+	}
+
+	// Lấy đơn hàng đang ăn theo bàn (ThanhToan = 3)
+	public List<Object[]> getDonHangDangAnByBan(long maBan) throws Exception {
+		List<Object[]> result = new ArrayList<>();
+		KetNoi kn = new KetNoi();
+		kn.ketnoi();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		try {
+			String sql = "SELECT TOP 1 MaHD, MaBan, MaNV, GioVao, GioRa, TongTien, ThanhToan, MaKH " +
+						 "FROM HoaDon " +
+						 "WHERE MaBan = ? AND ThanhToan = 3 " +
+						 "ORDER BY GioVao DESC";
+
+			ps = kn.cn.prepareStatement(sql);
+			ps.setLong(1, maBan);
+
+			rs = ps.executeQuery();
+			if (rs.next()) {
+				result.add(new Object[]{
+					rs.getLong("MaHD"),
+					rs.getLong("MaBan"),
+					rs.getLong("MaNV"),
+					rs.getTimestamp("GioVao"),
+					rs.getTimestamp("GioRa"),
+					rs.getLong("TongTien"),
+					rs.getInt("ThanhToan"),
+					rs.getLong("MaKH")
+				});
+			}
+		} finally {
+			if (rs != null) rs.close();
+			if (ps != null) ps.close();
+			kn.cn.close();
+		}
+		return result;
+	}
+
+	// Lấy danh sách đơn hàng đang ăn (ThanhToan = 3)
+	public List<Object[]> getDonHangDangAn() throws Exception {
+		List<Object[]> result = new ArrayList<>();
+		KetNoi kn = new KetNoi();
+		kn.ketnoi();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		try {
+			String sql = "SELECT MaHD, MaBan, MaNV, GioVao, GioRa, TongTien, ThanhToan, MaKH " +
+						 "FROM HoaDon " +
+						 "WHERE ThanhToan = 3 " +
 						 "ORDER BY GioVao DESC";
 
 			ps = kn.cn.prepareStatement(sql);

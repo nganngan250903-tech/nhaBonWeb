@@ -177,43 +177,38 @@
                     <form action="PaymentController" method="post">
                         <input type="hidden" name="action" value="processPayment">
 
-                        <!-- Customer Information -->
+                        <!-- Customer Information (tự động từ đăng nhập) -->
                         <h5 class="mb-3">Thông tin khách hàng</h5>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="customerName" class="form-label">Họ tên <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="customerName" name="customerName"
-                                       placeholder="Nhập họ tên" required>
+                        <div class="customer-info-display bg-light p-3 rounded">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p><strong>Họ tên:</strong> <%=((Model.KhachHang.KhachHang)request.getAttribute("khachHang")).getTenKH()%></p>
+                                    <p><strong>Số điện thoại:</strong> <%=((Model.KhachHang.KhachHang)request.getAttribute("khachHang")).getSdt()%></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong>Mã khách hàng:</strong> #<%=((Model.KhachHang.KhachHang)request.getAttribute("khachHang")).getMaKH()%></p>
+                                    <p><strong>Trạng thái:</strong> <span class="badge bg-success">Đã đăng nhập</span></p>
+                                </div>
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="customerPhone" class="form-label">Số điện thoại <span class="text-danger">*</span></label>
-                                <input type="tel" class="form-control" id="customerPhone" name="customerPhone"
-                                       placeholder="Nhập số điện thoại" required>
+                            <div class="alert alert-info mt-2">
+                                <small><i class="fas fa-info-circle"></i> Thông tin được lấy từ tài khoản đã đăng nhập của bạn.</small>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="customerEmail" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="customerEmail" name="customerEmail"
-                                       placeholder="Nhập email">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="deliveryAddress" class="form-label">Địa chỉ giao hàng</label>
-                                <input type="text" class="form-control" id="deliveryAddress" name="deliveryAddress"
-                                       placeholder="Nhập địa chỉ giao hàng">
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="notes" class="form-label">Ghi chú</label>
-                            <textarea class="form-control" id="notes" name="notes" rows="3"
-                                      placeholder="Ghi chú đặc biệt (tùy chọn)"></textarea>
                         </div>
 
                         <!-- Payment Methods -->
                         <h5 class="mb-3 mt-4">Phương thức thanh toán</h5>
                         <div class="payment-methods">
+                            <div class="payment-method" onclick="selectPaymentMethod('cash')">
+                                <input type="radio" id="cash" name="paymentMethod" value="cash" required>
+                                <i class="fas fa-money-bill-wave payment-method-icon"></i>
+                                <div>
+                                    <div class="fw-bold">Thanh toán bằng tiền mặt</div>
+                                    <small class="text-muted">Thanh toán trực tiếp tại bàn</small>
+                                </div>
+                            </div>
+
                             <div class="payment-method selected" onclick="selectPaymentMethod('qr')">
-                                <input type="radio" id="qr" name="paymentMethod" value="qr" required checked>
+                                <input type="radio" id="qr" name="paymentMethod" value="qr" checked>
                                 <i class="fas fa-qrcode payment-method-icon"></i>
                                 <div>
                                     <div class="fw-bold">Chuyển khoản QR Code</div>

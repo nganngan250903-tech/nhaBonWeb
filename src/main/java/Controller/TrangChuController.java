@@ -19,9 +19,14 @@ public class TrangChuController extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-	
+
 		request.setCharacterEncoding("UTF-8");
 		response.setCharacterEncoding("UTF-8");
+
+		// Set mã bàn mặc định = 1 vào session (nếu chưa có)
+		if (request.getSession().getAttribute("maBan") == null) {
+		    request.getSession().setAttribute("maBan", 1L);
+		}
 
 	    try {
 	        MonAnBo monBo = new MonAnBo();

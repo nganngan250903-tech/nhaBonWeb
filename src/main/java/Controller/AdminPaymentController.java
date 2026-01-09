@@ -27,11 +27,15 @@ public class AdminPaymentController extends HttpServlet {
             // Lấy danh sách đơn hàng đang chờ xác nhận thanh toán (ThanhToan = 2)
             List<Object[]> dsChoXacNhan = hoaDonBO.getDonHangChoXacNhan();
 
+            // Lấy danh sách đơn hàng đang ăn (ThanhToan = 3)
+            List<Object[]> dsDangAn = hoaDonBO.getDonHangDangAn();
+
             // Lấy danh sách đơn hàng đã thanh toán gần đây
             List<Object[]> dsDaThanhToan = hoaDonBO.getDonHangDaThanhToan();
 
             request.setAttribute("dsChoXacNhan", dsChoXacNhan);
             request.setAttribute("dsDaThanhToan", dsDaThanhToan);
+            request.setAttribute("dsDangAn", dsDangAn);
             request.setAttribute("activeMenu", "payment");
 
             RequestDispatcher rd = request.getRequestDispatcher("adminPayment.jsp");
