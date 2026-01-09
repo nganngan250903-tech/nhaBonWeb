@@ -5,29 +5,31 @@ import java.sql.Timestamp;
 import java.util.Objects;
 
 public class HoaDon {
-	 private String maHD;
-	    private String maBan;
-	    private String maNV;
+	 private long maHD;
+	    private long maBan;
+	    private long maNV;
 	    private Timestamp gioVao;
 	    private Timestamp gioRa;
 	    private long tongTien;
-	    private int trangThai;
-		public String getMaHD() {
+	    private int ThanhToan;
+	    private long MaKH;
+	    public HoaDon() {}
+		public long getMaHD() {
 			return maHD;
 		}
-		public void setMaHD(String maHD) {
+		public void setMaHD(long maHD) {
 			this.maHD = maHD;
 		}
-		public String getMaBan() {
+		public long getMaBan() {
 			return maBan;
 		}
-		public void setMaBan(String maBan) {
+		public void setMaBan(long maBan) {
 			this.maBan = maBan;
 		}
-		public String getMaNV() {
+		public long getMaNV() {
 			return maNV;
 		}
-		public void setMaNV(String maNV) {
+		public void setMaNV(long maNV) {
 			this.maNV = maNV;
 		}
 		public Timestamp getGioVao() {
@@ -48,14 +50,25 @@ public class HoaDon {
 		public void setTongTien(long tongTien) {
 			this.tongTien = tongTien;
 		}
-		public int getTrangThai() {
-			return trangThai;
+		public int getThanhToan() {
+			return ThanhToan;
 		}
-		public void setTrangThai(int trangThai) {
-			this.trangThai = trangThai;
+		public void setThanhToan(int thanhToan) {
+			ThanhToan = thanhToan;
 		}
-		public HoaDon(String maHD, String maBan, String maNV, Timestamp gioVao, Timestamp gioRa, long tongTien,
-				int trangThai) {
+		public long getMaKH() {
+			return MaKH;
+		}
+		public void setMaKH(long maKH) {
+			MaKH = maKH;
+		}
+		@Override
+		public String toString() {
+			return "HoaDon [maHD=" + maHD + ", maBan=" + maBan + ", maNV=" + maNV + ", gioVao=" + gioVao + ", gioRa="
+					+ gioRa + ", tongTien=" + tongTien + ", ThanhToan=" + ThanhToan + ", MaKH=" + MaKH + "]";
+		}
+		public HoaDon(long maHD, long maBan, long maNV, Timestamp gioVao, Timestamp gioRa, long tongTien,
+				int thanhToan, long maKH) {
 			super();
 			this.maHD = maHD;
 			this.maBan = maBan;
@@ -63,12 +76,8 @@ public class HoaDon {
 			this.gioVao = gioVao;
 			this.gioRa = gioRa;
 			this.tongTien = tongTien;
-			this.trangThai = trangThai;
-		}
-		@Override
-		public String toString() {
-			return "HoaDon [maHD=" + maHD + ", maBan=" + maBan + ", maNV=" + maNV + ", gioVao=" + gioVao + ", gioRa="
-					+ gioRa + ", tongTien=" + tongTien + ", trangThai=" + trangThai + "]";
+			ThanhToan = thanhToan;
+			MaKH = maKH;
 		}
 	    
 }

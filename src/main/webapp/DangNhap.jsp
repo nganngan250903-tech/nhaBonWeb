@@ -44,7 +44,7 @@
     <h4 class="text-center mb-3">🍲 Ốc Nhà Bon</h4>
     <p class="text-center text-muted">Đăng nhập hệ thống</p>
 
-    <form action="dangnhapController" method="post">
+    <form action="DangNhapController" method="post">
 
         <input type="hidden" name="loginType" id="loginType" value="NV">
 

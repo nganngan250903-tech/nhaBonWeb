@@ -1,17 +1,18 @@
 package Model.MonAn;
 
 public class MonAn {
-	private String maMon;
+	private long maMon;
     private String tenMon;
     private long gia;
     private String hinhAnh;
     private String moTa;
-    private String maDM;
-    private String trangThaiMon;
-	public String getMaMon() {
+    private long maDM;
+    private int trangThaiMon; // 0: đang làm . 1: đã làm
+    private  int SoLuong ;
+	public long getMaMon() {
 		return maMon;
 	}
-	public void setMaMon(String maMon) {
+	public void setMaMon(long maMon) {
 		this.maMon = maMon;
 	}
 	public String getTenMon() {
@@ -38,36 +39,39 @@ public class MonAn {
 	public void setMoTa(String moTa) {
 		this.moTa = moTa;
 	}
-	public String getMaDM() {
+	public long getMaDM() {
 		return maDM;
 	}
-	public void setMaDM(String maDM) {
+	public void setMaDM(long maDM) {
 		this.maDM = maDM;
 	}
-	public String getTrangThaiMon() {
+	public int getTrangThaiMon() {
 		return trangThaiMon;
 	}
-	public void setTrangThaiMon(String trangThaiMon) {
+	public void setTrangThaiMon(int trangThaiMon) {
 		this.trangThaiMon = trangThaiMon;
 	}
-	public MonAn() {}
-
-    // constructor đầy đủ
-    public MonAn(String maMon, String tenMon, long gia,
-                 String hinhAnh, String moTa,
-                 String maDM, String trangThaiMon) {
-        this.maMon = maMon;
-        this.tenMon = tenMon;
-        this.gia = gia;
-        this.hinhAnh = hinhAnh;
-        this.moTa = moTa;
-        this.maDM = maDM;
-        this.trangThaiMon = trangThaiMon;
-    }
+	public int getSoLuong() {
+		return SoLuong;
+	}
+	public void setSoLuong(int soLuong) {
+		SoLuong = soLuong;
+	}
+	public MonAn(long maMon, String tenMon, long gia, String hinhAnh, String moTa, long maDM, int trangThaiMon,
+			int soLuong) {
+		super();
+		this.maMon = maMon;
+		this.tenMon = tenMon;
+		this.gia = gia;
+		this.hinhAnh = hinhAnh;
+		this.moTa = moTa;
+		this.maDM = maDM;
+		this.trangThaiMon = trangThaiMon;
+		SoLuong = soLuong;
+	}
 	@Override
 	public String toString() {
-		return "MonAnBo [maMon=" + maMon + ", tenMon=" + tenMon + ", gia=" + gia + ", hinhAnh=" + hinhAnh + ", moTa="
-				+ moTa + ", maDM=" + maDM + ", trangThaiMon=" + trangThaiMon + "]";
+		return "MonAn [maMon=" + maMon + ", tenMon=" + tenMon + ", gia=" + gia + ", hinhAnh=" + hinhAnh + ", moTa="
+				+ moTa + ", maDM=" + maDM + ", trangThaiMon=" + trangThaiMon + ", SoLuong=" + SoLuong + "]";
 	}
-
-}
+    }
