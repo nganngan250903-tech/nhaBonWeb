@@ -47,8 +47,6 @@
 	<a href="QLMonController">🍽️ Quản lý Món</a>
 	<a href="QLDanhMucController">📂 Danh mục</a>
 	<a href="QLBanController">🪑 Bàn ăn</a>
-	<a href="HoaDonAdminController">🧾 Đơn hàng</a>
-	<a href="QuanLyTrangThaiController">⚙️ Trạng thái món</a>
 
 	<a href="dangxuatAdminController" class="fw-bold mt-3 text-danger">
 		🚪 Đăng xuất

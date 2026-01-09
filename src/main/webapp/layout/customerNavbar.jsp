@@ -25,12 +25,7 @@
           <li class="nav-item">
             <a class="nav-link ${activeMenu == 'theodoi' ? 'active' : ''}" href="TheoDoiDonHangController">Theo dõi đơn</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link ${activeMenu == 'thanhtoan' ? 'active' : ''}" href="ThanhToanController">Thanh toán</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link ${activeMenu == 'lichsu' ? 'active' : ''}" href="LichSuController">Lịch sử</a>
-          </li>
+       
         </c:if>
       </ul>
 

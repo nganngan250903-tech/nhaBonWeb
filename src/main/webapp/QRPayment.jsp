@@ -203,7 +203,7 @@
 
                 <div class="detail-row">
                     <span><strong>Ngân hàng:</strong></span>
-                    <span>[Tên ngân hàng của bạn]</span>
+                    <span>MB Bank</span>
                 </div>
 
                 <div class="detail-row">

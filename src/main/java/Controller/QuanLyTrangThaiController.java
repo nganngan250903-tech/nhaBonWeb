@@ -43,11 +43,11 @@ public class QuanLyTrangThaiController extends HttpServlet {
             ChiTietHoaDonBO ctBO = new ChiTietHoaDonBO();
 
             // Kiểm tra nếu có parameter maHD (xem chi tiết hóa đơn cụ thể)
-            String maHDParam = request.getParameter("maHD");
+            String maHDParam = request.getParameter("maBan");
             if (maHDParam != null && !maHDParam.trim().isEmpty()) {
                 // Hiển thị chi tiết của một hóa đơn cụ thể
                 long maHD = Long.parseLong(maHDParam);
-                List<Object[]> chiTiet = ctBO.getChiTietByMaHD(maHD);
+                List<Object[]> chiTiet = ctBO.getChiTietTongByBan(maHD);
                 Object[] hoaDonInfo = hoaDonBO.getHoaDonById(maHD);
 
                 request.setAttribute("hoaDonInfo", hoaDonInfo);
@@ -65,7 +65,7 @@ public class QuanLyTrangThaiController extends HttpServlet {
                     List<Object[]> chiTiet = null;
 
                     try {
-                        chiTiet = ctBO.getChiTietByMaHD(maHD);
+                        chiTiet = ctBO.getChiTietTongByBan(maHD);
                         System.out.println("Loaded " + (chiTiet != null ? chiTiet.size() : 0) + " chi tiet for MaHD: " + maHD);
                     } catch (Exception e) {
                         System.out.println("Error loading chi tiet for MaHD " + maHD + ": " + e.getMessage());
